@@ -22,7 +22,7 @@ const DEFAULT_IGNORES = [
 
 export async function scanCodebase(dir: string): Promise<ScannedFile[]> {
   // Load .gitignore rules if present
-  const ig = createIgnore.default ? createIgnore.default() : createIgnore();
+  const ig = (createIgnore as any).default ? (createIgnore as any).default() : (createIgnore as any)();
   const gitignorePath = join(dir, ".gitignore");
   if (existsSync(gitignorePath)) {
     try {

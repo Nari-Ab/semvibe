@@ -1,121 +1,104 @@
-// reporter.ts
-// Красивый вывод результатов в терминал
-
 import chalk from "chalk";
-import type { AnalysisResult, InconsistentPattern } from "./analyzer.js";
+import { LearnResult, ScanResult, ExportResult } from "./core/pipeline.js";
 
-// Иконки и цвета по уровню серьёзности
-const SEVERITY_CONFIG = {
-  critical: { icon: "🔴", color: chalk.red.bold,    label: "CRITICAL" },
-  high:     { icon: "🟠", color: chalk.yellow.bold, label: "HIGH"     },
-  medium:   { icon: "🟡", color: chalk.cyan,        label: "MEDIUM"   },
-  low:      { icon: "🔵", color: chalk.blue,        label: "LOW"      },
-} as const;
-
-function printHeader(filesScanned: number, dir: string, model: string) {
+export function printLearnReport(result: LearnResult, dir: string) {
   console.log();
-  console.log(chalk.bold.white("╔════════════════════════════════════════╗"));
-  console.log(chalk.bold.white("║") + chalk.bold.cyan("         semvibe · vibe scan            ") + chalk.bold.white("║"));
-  console.log(chalk.bold.white("╚════════════════════════════════════════╝"));
+  console.log(chalk.bold.cyan("╔══════════════════════════════════════════════════════════╗"));
+  console.log(chalk.bold.cyan("║") + chalk.bold.white("              semvibe · invariant discovery               ") + chalk.bold.cyan("║"));
+  console.log(chalk.bold.cyan("╚══════════════════════════════════════════════════════════╝"));
   console.log();
-  console.log(chalk.dim(`  Scanned: ${chalk.white(dir)}`));
-  console.log(chalk.dim(`  Files:   ${chalk.white(filesScanned)}`));
-  console.log(chalk.dim(`  Model:   ${chalk.white(model)}`) + (model.includes("Ollama") ? chalk.green(" (free)") : chalk.yellow(" (API)")));
-  console.log();
-}
-
-function printPattern(pattern: InconsistentPattern, index: number) {
-  const cfg = SEVERITY_CONFIG[pattern.severity];
-
-  console.log(
-    chalk.bold(`  ${cfg.icon}  #${index + 1} — ${pattern.name}`) +
-    "  " +
-    cfg.color(`[${cfg.label}]`)
-  );
+  console.log(chalk.dim(`  Repository: ${chalk.white(dir)}`));
   console.log();
 
-  // Показываем все варианты реализации
-  console.log(chalk.dim("    Variants found:"));
-  for (const variant of pattern.variants) {
-    const fileList = variant.files.join(", ");
-    console.log(chalk.white(`    • ${variant.approach}`));
-    console.log(chalk.dim(`      in: ${fileList}`));
-    if (variant.example) {
-      // Показываем пример кода
-      const exampleLines = variant.example
-        .split("\n")
-        .slice(0, 3) // максимум 3 строки
-        .map((line: string) => chalk.green(`      │ ${line}`))
-        .join("\n");
-      console.log(exampleLines);
+  if (result.invariants.length > 0) {
+    console.log(chalk.bold.green(`  ✔ Discovered ${result.invariants.length} Dominant Architectural Invariants:`));
+    console.log();
+    for (const inv of result.invariants) {
+      const pct = Math.round(inv.confidence * 100);
+      console.log(
+        `  ${chalk.cyan("•")} ${chalk.bold.white(inv.description)} ` +
+        chalk.green(`[${pct}% Dominance]`)
+      );
+      console.log(chalk.dim(`    Pattern:     ${inv.dominantPattern}`));
+      console.log(chalk.dim(`    Sample Size: ${inv.sampleSize} instances across ${inv.fileCount} files`));
+      console.log();
+    }
+  } else {
+    console.log(chalk.yellow("  ⚠ No dominant invariants met the >=75% threshold."));
+    console.log();
+  }
+
+  if (result.divergences.length > 0) {
+    console.log(chalk.bold.yellow(`  ⚡ Found ${result.divergences.length} Unresolved Style Divergences:`));
+    console.log();
+    for (const div of result.divergences) {
+      console.log(`  ${chalk.yellow("•")} ${chalk.bold.white(div.description)}`);
+      for (const p of div.patterns) {
+        console.log(chalk.dim(`    - ${p.pattern}: ${p.count} instances (${p.percentage}%)`));
+      }
+      console.log();
+    }
+  }
+
+  if (result.warnings && result.warnings.length > 0) {
+    console.log(chalk.dim("  Sample Warnings:"));
+    for (const w of result.warnings) {
+      console.log(chalk.dim(`  ! ${w}`));
     }
     console.log();
   }
 
-  // Почему это проблема
-  console.log(chalk.dim("    Impact:"));
-  console.log(chalk.white(`    ${pattern.impact}`));
-  console.log();
-
-  // Что делать
-  console.log(chalk.dim("    Fix:"));
-  console.log(chalk.cyan(`    → ${pattern.recommendation}`));
-  console.log();
-
-  console.log(chalk.dim("  " + "─".repeat(40)));
+  if (result.persisted) {
+    console.log(chalk.green("  ✔ Saved verified invariants to .semvibe/invariants.json"));
+  } else {
+    console.log(chalk.dim("  Run with --save or confirm prompt to persist invariants."));
+  }
   console.log();
 }
 
-function printSummary(result: AnalysisResult) {
-  const { patterns } = result;
+export function printScanReport(result: ScanResult, dir: string) {
+  console.log();
+  console.log(chalk.bold.cyan("╔══════════════════════════════════════════════════════════╗"));
+  console.log(chalk.bold.cyan("║") + chalk.bold.white("                 semvibe · semantic scan                  ") + chalk.bold.cyan("║"));
+  console.log(chalk.bold.cyan("╚══════════════════════════════════════════════════════════╝"));
+  console.log();
+  console.log(chalk.dim(`  Scanned:    ${chalk.white(dir)}`));
+  console.log(chalk.dim(`  Files:      ${chalk.white(result.totalFilesScanned)}`));
+  console.log(chalk.dim(`  Invariants: ${chalk.white(result.invariantsUsed.length)}`));
+  console.log();
 
-  if (patterns.length === 0) {
-    console.log(chalk.green.bold("  ✅  No architectural inconsistencies found!"));
-    console.log(chalk.dim(`  ${result.summary}`));
+  if (result.violations.length === 0) {
+    console.log(chalk.bold.green("  ✅ No architectural inconsistencies detected! Codebase is aligned."));
     console.log();
     return;
   }
 
-  // Считаем по severity
-  const counts = {
-    critical: patterns.filter((p) => p.severity === "critical").length,
-    high:     patterns.filter((p) => p.severity === "high").length,
-    medium:   patterns.filter((p) => p.severity === "medium").length,
-    low:      patterns.filter((p) => p.severity === "low").length,
-  };
+  console.log(chalk.bold.red(`  ❌ Found ${result.violations.length} Architectural Violation${result.violations.length === 1 ? "" : "s"}:`));
+  console.log();
 
-  console.log(chalk.bold("  Summary"));
-  console.log(chalk.dim("  ") + result.summary);
-  console.log();
-  console.log(
-    `  ${chalk.red(`${counts.critical} critical`)}  ` +
-    `${chalk.yellow(`${counts.high} high`)}  ` +
-    `${chalk.cyan(`${counts.medium} medium`)}  ` +
-    `${chalk.blue(`${counts.low} low`)}`
-  );
-  console.log();
+  result.violations.forEach((v, idx) => {
+    const o = v.outlier;
+    console.log(
+      chalk.bold.red(`  #${idx + 1} `) +
+      chalk.bold.white(`${o.filePath}:${o.line}`) +
+      (o.functionName ? chalk.dim(` in ${o.functionName}()`) : "")
+    );
+    console.log(chalk.dim(`    Observed: `) + chalk.red(o.observed) + chalk.dim(` | Expected: `) + chalk.green(o.expected));
+    console.log(chalk.dim(`    Reason:   `) + chalk.white(v.reasoning));
+    if (v.suggestedRemediation) {
+      console.log(chalk.dim(`    Fix:      `) + chalk.cyan(v.suggestedRemediation));
+    }
+    console.log();
+  });
 }
 
-export function printReport(result: AnalysisResult, dir: string) {
-  printHeader(result.filesScanned, dir, result.model);
-
-  if (result.patterns.length === 0) {
-    printSummary(result);
-    return;
+export function printExportReport(result: ExportResult, dir: string) {
+  console.log();
+  console.log(chalk.bold.green(`  ✔ Exported ${result.invariantsCount} architectural invariants:`));
+  for (const f of result.modifiedFiles) {
+    console.log(chalk.cyan(`    → ${f}`));
   }
-
-  console.log(chalk.bold.white(`  Found ${result.patterns.length} architectural inconsistenc${result.patterns.length === 1 ? "y" : "ies"}:`));
   console.log();
-  console.log(chalk.dim("  " + "─".repeat(40)));
+  console.log(chalk.dim("  AI agents (Cursor, Claude Code, Windsurf) will now automatically obey these rules."));
   console.log();
-
-  // Сортируем: сначала critical, потом high, medium, low
-  const severityOrder = { critical: 0, high: 1, medium: 2, low: 3 };
-  const sorted = [...result.patterns].sort(
-    (a, b) => severityOrder[a.severity] - severityOrder[b.severity]
-  );
-
-  sorted.forEach((pattern, i) => printPattern(pattern, i));
-
-  printSummary(result);
 }
