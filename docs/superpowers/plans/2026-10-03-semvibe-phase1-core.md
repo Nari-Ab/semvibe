@@ -2,30 +2,92 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Build the Semvibe Phase 1 Lean Core MVP: TypeScript AST extraction, statistical invariant discovery (`semvibe learn`), semantic outlier detection (`semvibe scan`), targeted LLM verification, and agent guardrail generator (`semvibe export-rules`).
+**Goal:** Build the Semvibe Phase 1 Lean Core MVP: robust TypeScript file scanner with `.gitignore`, enhanced AST feature extractor, statistical invariant clustering with minimum sample thresholds, targeted LLM semantic verification, modern agent rules exporter (`AGENTS.md` & `CLAUDE.md`), interactive CLI (`learn`, `scan`, `export-rules`), and an automated Benchmark Runner for precision validation against competitors.
 
-**Architecture:** A two-phase hybrid engine where a fast, zero-token TypeScript AST extractor indexes import hierarchies, error handling schemas, and dependency usage. Statistical clustering identifies dominant patterns (>75%) and flags candidate invariants or unresolved style splits. Statistical outliers are fed to a targeted LLM verifier (Anthropic API / Ollama / OpenAI-compatible) to eliminate false positives, and confirmed invariants can be exported directly into `.cursorrules` and `CLAUDE.md`.
+**Architecture:** A two-phase hybrid engine:
+1. Fast AST & Call Extractor (0 tokens) scans TypeScript codebases, extracting function-level error handling (`throw`, `Result`, `{ success: false }`), global calls (e.g. `fetch()`), layer roles, and dependency roles (HTTP/Validation/State).
+2. Statistical Invariant Learner clusters patterns with a minimum sample size threshold (≥5 functions) and dominance threshold (≥75%). Divergences are flagged as unresolved style splits.
+3. Targeted LLM Verifier tests only statistical outliers against positive repository examples.
+4. Rules Exporter compiles verified invariants into modern agent guidelines (`AGENTS.md`, `CLAUDE.md`).
+5. Benchmark Runner tests the pipeline against real-world repos to prove Precision ≥80% before Phase 2 investment.
 
-**Tech Stack:** TypeScript (ESM), Node.js (>=18), TypeScript Compiler API (`typescript`), `commander` (CLI), `chalk` & `ora` (terminal UI), `vitest` (TDD unit & integration tests).
+**Tech Stack:** Node.js (>=20), TypeScript 5+ (ESM), TypeScript Compiler API (`typescript`), `vitest` (2.x), `commander`, `chalk`, `ora`, `glob`, `ignore`.
 
 **Spec:** `docs/superpowers/specs/2026-10-03-semvibe-commercial-architecture.md`
 
 ## Global Constraints
-- **Language & Runtime:** TypeScript strictly typed (`strict: true`), ESM modules (`"type": "module"`).
-- **Zero Token Baseline:** AST extraction, clustering, and rule export must run completely offline without tokens.
-- **Precision First:** Optimize for low false-positive rate (target >80% precision); never invent invariants when distribution is fragmented (e.g. <75% dominance).
-- **No Hallucinated Configs:** Invariants are discovered dynamically from code, saved to `.semvibe/invariants.json`.
+- **Runtime:** Node.js `>=20.0.0`, `"type": "module"`.
+- **Zero Token Core:** Scanner, AST extraction, clustering, and rule export must run 100% offline without any API keys.
+- **Strict Dominance Threshold:** Dominance threshold is strictly `>= 75%`. Sample size must be `>= 5` instances to declare an invariant.
+- **Standard Agent Formats:** Primary rule targets are `AGENTS.md` and `CLAUDE.md` (cross-tool standards supported by Cursor, Windsurf, Claude Code, Copilot, Antigravity).
+- **Graceful Error Handling:** Syntax errors in scanned files must produce logged warnings and partial parse skip, never a process crash.
 
 ## Review Focus
-1. **Empty / Tiny Codebases:** Codebase with fewer than 3 files or no clear patterns must not crash or output garbage invariants; should warn gracefully.
-2. **Syntax Errors in Scanned Code:** Unparseable user files must be logged as warnings without halting the entire scan.
-3. **High Pattern Fragmentation:** When code has a 40/35/25 split in error handling, the engine must flag "Unresolved Style Divergence" instead of marking 60% of files as errors.
-4. **Offline / Missing LLM Key:** When running `semvibe scan --ast-only` or when no LLM key is configured, fallback smoothly to pure AST outlier reporting.
-5. **Idempotent Rules Export:** `semvibe export-rules` must safely insert or update the `<!-- SEMVIBE:START -->` / `<!-- SEMVIBE:END -->` block in existing `.cursorrules` or `CLAUDE.md` without overwriting existing user instructions.
+1. **Unparseable / Syntax-Broken Files:** TypeScript files with parse errors must be caught and skipped with a warning; must not produce corrupted signatures.
+2. **Small / Low-Sample Repositories (<5 functions per layer):** Must not invent false invariants; must report "Insufficient sample size to establish invariants" instead of flagging 1-2 files.
+3. **Global Calls Detection:** Must catch global `fetch()` calls even when no `import ... from '...'` statement is present.
+4. **Offline / Missing LLM Key Fallback:** `semvibe scan` must run cleanly with `--ast-only` or when no LLM key is set, outputting candidate AST outliers.
+5. **Idempotent Rules Injection:** Preserves all existing instructions in `AGENTS.md` or `CLAUDE.md`, only modifying between `<!-- SEMVIBE:START -->` and `<!-- SEMVIBE:END -->`.
 
 ---
 
-### Task 1: Test Suite & Infrastructure Setup
+### Task 0: Project Scaffolding & Robust File Scanner
+
+**Files:**
+- Create: `src/core/scanner.ts`
+- Modify: `package.json`
+- Modify: `tsconfig.json`
+- Test: `tests/core/scanner.test.ts`
+
+**Interfaces:**
+- Consumes: Target directory path
+- Produces: `ScannedFile[]`
+  - `path: string` (relative)
+  - `content: string`
+  - `lines: number`
+
+- [ ] **Step 1: Write failing tests for scanner with `.gitignore` and exclusion filters**
+```typescript
+// tests/core/scanner.test.ts
+import { describe, it, expect } from "vitest";
+import { scanCodebase } from "../../src/core/scanner.js";
+import { resolve } from "path";
+
+describe("Scanner", () => {
+  it("ignores node_modules, dist, tests, mocks and d.ts files", async () => {
+    const files = await scanCodebase(resolve("."));
+    const paths = files.map(f => f.path);
+    expect(paths.some(p => p.includes("node_modules"))).toBe(false);
+    expect(paths.some(p => p.includes("dist/"))).toBe(false);
+    expect(paths.some(p => p.endsWith(".test.ts"))).toBe(false);
+    expect(paths.some(p => p.endsWith(".d.ts"))).toBe(false);
+  });
+});
+```
+
+- [ ] **Step 2: Run test to verify it fails**
+Run: `npm test tests/core/scanner.test.ts`
+Expected: FAIL (`scanCodebase` not defined)
+
+- [ ] **Step 3: Implement `src/core/scanner.ts` and update `package.json` / `tsconfig.json`**
+Add dependencies: `ignore`, `glob`.
+Update `tsconfig.json` for Node20 ESM resolution.
+Filter out tests (`*.test.*`, `*.spec.*`, `__tests__`), mocks (`*.mock.*`), declarations (`*.d.ts`), build outputs (`dist/`, `build/`).
+Respect `.gitignore` if present.
+
+- [ ] **Step 4: Run test to verify it passes**
+Run: `npm test tests/core/scanner.test.ts`
+Expected: PASS
+
+- [ ] **Step 5: Commit**
+```bash
+git add package.json tsconfig.json src/core/scanner.ts tests/core/scanner.test.ts
+git commit -m "feat(core): implement robust scanner with gitignore and test exclusions"
+```
+
+---
+
+### Task 1: Vitest 2.x Testing Setup
 
 **Files:**
 - Create: `vitest.config.ts`
@@ -33,103 +95,110 @@
 - Test: `tests/setup.test.ts`
 
 **Interfaces:**
-- Consumes: Node.js, npm
-- Produces: Working `npm test` script executing Vitest in ESM mode
+- Consumes: npm
+- Produces: Working test pipeline with TypeScript ESM support
 
-- [ ] **Step 1: Write failing smoke test**
+- [ ] **Step 1: Write smoke test**
 ```typescript
 // tests/setup.test.ts
 import { describe, it, expect } from "vitest";
 
-describe("Semvibe Test Infrastructure", () => {
-  it("executes vitest correctly in TypeScript ESM mode", () => {
-    expect(true).toBe(true);
+describe("Test Infrastructure", () => {
+  it("runs vitest in Node 20 ESM environment", () => {
+    expect(process.version.startsWith("v2")).toBe(true);
   });
 });
 ```
 
-- [ ] **Step 2: Run test to verify it fails (vitest not installed yet)**
-Run: `npm test`
-Expected: FAIL (missing vitest / test command)
+- [ ] **Step 2: Run test to verify it fails**
+Run: `npm test tests/setup.test.ts`
+Expected: FAIL (vitest not installed)
 
-- [ ] **Step 3: Install vitest devDependency and update package.json**
-Add `"vitest": "^1.6.0"` to devDependencies, add `"test": "vitest run"`.
-Create `vitest.config.ts`.
+- [ ] **Step 3: Install `vitest` and configure `vitest.config.ts`**
+Run `npm install -D vitest` and configure `test` script in `package.json`.
 
 - [ ] **Step 4: Run test to verify it passes**
-Run: `npm test`
-Expected: PASS (1 test passed)
+Run: `npm test tests/setup.test.ts`
+Expected: PASS
 
 - [ ] **Step 5: Commit**
 ```bash
 git add package.json vitest.config.ts tests/setup.test.ts
-git commit -m "chore: setup vitest testing framework"
+git commit -m "chore: configure vitest 2.x test runner"
 ```
 
 ---
 
-### Task 2: TypeScript AST Extractor
+### Task 2: Enhanced AST Extractor & Domain Types
 
 **Files:**
-- Create: `src/core/extractor.ts`
 - Create: `src/core/types.ts`
+- Create: `src/core/extractor.ts`
 - Test: `tests/core/extractor.test.ts`
 
 **Interfaces:**
-- Consumes: Source file paths + code content
+- Consumes: Source code string + file path
 - Produces: `FileSignature`
   - `filePath: string`
-  - `imports: { source: string; isExternal: boolean; specifiers: string[] }[]`
-  - `errorHandling: { throws: number; returnsResult: number; tryCatchBlocks: number }`
   - `layer: "component" | "controller" | "service" | "db" | "util" | "unknown"`
+  - `imports: ImportSignature[]`
+  - `globalCalls: string[]` (e.g. `fetch`, `axios`)
+  - `functions: FunctionSignature[]`
+    - `name: string`
+    - `line: number`
+    - `errorStrategy: "throw" | "result-pattern" | "success-boolean" | "error-object" | "none"`
 
-- [ ] **Step 1: Write failing tests for AST extraction**
+- [ ] **Step 1: Write failing tests for function-level error schemas and global call detection**
 ```typescript
 // tests/core/extractor.test.ts
 import { describe, it, expect } from "vitest";
-import { extractFileSignature } from "../../src/core/extractor.js";
+import { extractFileSignature, PACKAGE_ROLES } from "../../src/core/extractor.js";
 
-describe("AST Extractor", () => {
-  it("extracts imports, error handling and layer from service file", () => {
+describe("Enhanced AST Extractor", () => {
+  it("detects global fetch calls without imports", () => {
     const code = `
-      import axios from "axios";
-      import { db } from "../db/client";
-
-      export async function getUser(id: string) {
-        if (!id) throw new Error("ID required");
-        return db.users.find(id);
+      export async function loadUsers() {
+        const res = await fetch("https://api.example.com");
+        return res.json();
       }
     `;
-    const sig = extractFileSignature("src/services/userService.ts", code);
+    const sig = extractFileSignature("src/services/api.service.ts", code);
+    expect(sig.globalCalls).toContain("fetch");
     expect(sig.layer).toBe("service");
-    expect(sig.imports).toHaveLength(2);
-    expect(sig.imports[0].isExternal).toBe(true);
-    expect(sig.imports[1].isExternal).toBe(false);
-    expect(sig.errorHandling.throws).toBe(1);
-    expect(sig.errorHandling.returnsResult).toBe(0);
   });
 
-  it("detects Result<T, E> return patterns", () => {
+  it("classifies error handling per function (throw vs Result vs { success: false })", () => {
     const code = `
-      export function parseData(): Result<Data, ParseError> {
-        return ok({ valid: true });
-      }
+      export function parseA() { throw new Error("A failed"); }
+      export function parseB(): Result<string, Error> { return ok("B"); }
+      export function parseC() { return { success: false, error: "C failed" }; }
     `;
-    const sig = extractFileSignature("src/services/parser.ts", code);
-    expect(sig.errorHandling.returnsResult).toBe(1);
-    expect(sig.errorHandling.throws).toBe(0);
+    const sig = extractFileSignature("src/services/parsers.ts", code);
+    expect(sig.functions).toHaveLength(3);
+    expect(sig.functions[0].errorStrategy).toBe("throw");
+    expect(sig.functions[1].errorStrategy).toBe("result-pattern");
+    expect(sig.functions[2].errorStrategy).toBe("success-boolean");
+  });
+
+  it("handles syntax errors gracefully without throwing", () => {
+    const brokenCode = `export function broken( {`;
+    const sig = extractFileSignature("src/broken.ts", brokenCode);
+    expect(sig).toBeDefined();
+    expect(sig.hasParseErrors).toBe(true);
   });
 });
 ```
 
 - [ ] **Step 2: Run test to verify it fails**
 Run: `npm test tests/core/extractor.test.ts`
-Expected: FAIL (cannot find module `src/core/extractor.js`)
+Expected: FAIL (`extractFileSignature` not defined)
 
-- [ ] **Step 3: Implement `types.ts` and `extractFileSignature` using TypeScript Compiler API (`ts.createSourceFile`)**
-Parse imports (External package vs relative local path).
-Inspect function declarations, methods, and return statements for `throw`, `Result`, `ok(`, `err(`.
-Classify layer based on file path conventions (`components/`, `services/`, `controllers/`, `routes/`, `db/`).
+- [ ] **Step 3: Implement `types.ts` and `extractor.ts` using TypeScript AST**
+Define `PACKAGE_ROLES` dictionary (HTTP: `axios`, `got`, `node-fetch`, `ky`, `undici`; Validator: `zod`, `yup`, `joi`, `valibot`; State: `zustand`, `redux`, `mobx`, `jotai`).
+Inspect AST nodes for `CallExpression` to identify global calls (`fetch`).
+Inspect functions/methods/arrow functions: check return expressions for `{ success: false }`, `{ error: ... }`, `ok(`, `err(`, and `throw` statements.
+Infer layer from file suffix (`.service.ts`, `.controller.ts`, `.route.ts`) and path.
+Handle `ts.getPreEmitDiagnostics` to flag `hasParseErrors`.
 
 - [ ] **Step 4: Run test to verify it passes**
 Run: `npm test tests/core/extractor.test.ts`
@@ -138,24 +207,24 @@ Expected: PASS
 - [ ] **Step 5: Commit**
 ```bash
 git add src/core/types.ts src/core/extractor.ts tests/core/extractor.test.ts
-git commit -m "feat(core): implement AST feature extractor for TypeScript files"
+git commit -m "feat(core): implement enhanced AST extractor with global calls and error schemas"
 ```
 
 ---
 
-### Task 3: Invariant Discovery & Statistical Clustering
+### Task 3: Statistical Invariant Clustering & Divergence Detector
 
 **Files:**
 - Create: `src/core/invariants.ts`
 - Test: `tests/core/invariants.test.ts`
 
 **Interfaces:**
-- Consumes: `FileSignature[]`
+- Consumes: `FileSignature[]`, `options: { dominanceThreshold?: number, minSampleSize?: number }`
 - Produces: `InvariantDiscoveryResult`
   - `dominantInvariants: Invariant[]`
   - `unresolvedDivergences: Divergence[]`
 
-- [ ] **Step 1: Write failing tests for statistical invariant clustering**
+- [ ] **Step 1: Write failing tests with sample size and threshold checks**
 ```typescript
 // tests/core/invariants.test.ts
 import { describe, it, expect } from "vitest";
@@ -163,30 +232,64 @@ import { discoverInvariants } from "../../src/core/invariants.js";
 import { FileSignature } from "../../src/core/types.js";
 
 describe("Invariant Discovery", () => {
-  it("discovers dominant error handling pattern when dominance >= 75%", () => {
+  it("enforces minimum sample size threshold (>= 5 functions)", () => {
     const signatures: FileSignature[] = [
-      { filePath: "src/services/a.ts", layer: "service", imports: [], errorHandling: { throws: 0, returnsResult: 2, tryCatchBlocks: 0 } },
-      { filePath: "src/services/b.ts", layer: "service", imports: [], errorHandling: { throws: 0, returnsResult: 1, tryCatchBlocks: 0 } },
-      { filePath: "src/services/c.ts", layer: "service", imports: [], errorHandling: { throws: 0, returnsResult: 3, tryCatchBlocks: 0 } },
-      { filePath: "src/services/d.ts", layer: "service", imports: [], errorHandling: { throws: 1, returnsResult: 0, tryCatchBlocks: 0 } },
+      {
+        filePath: "src/services/a.service.ts",
+        layer: "service",
+        imports: [],
+        globalCalls: [],
+        functions: [{ name: "fn1", line: 1, errorStrategy: "throw" }],
+        hasParseErrors: false
+      }
     ];
-    const result = discoverInvariants(signatures, { dominanceThreshold: 0.75 });
-    expect(result.dominantInvariants).toHaveLength(1);
-    expect(result.dominantInvariants[0].type).toBe("error-handling");
-    expect(result.dominantInvariants[0].dominantPattern).toBe("result-pattern");
-    expect(result.dominantInvariants[0].confidence).toBe(0.75);
-    expect(result.unresolvedDivergences).toHaveLength(0);
+    const result = discoverInvariants(signatures, { minSampleSize: 5 });
+    expect(result.dominantInvariants).toHaveLength(0);
+    expect(result.insufficientSampleWarnings).toBeDefined();
   });
 
-  it("detects unresolved divergence when distribution is split without clear winner", () => {
-    const signatures: FileSignature[] = [
-      { filePath: "src/services/a.ts", layer: "service", imports: [], errorHandling: { throws: 1, returnsResult: 0, tryCatchBlocks: 0 } },
-      { filePath: "src/services/b.ts", layer: "service", imports: [], errorHandling: { throws: 0, returnsResult: 1, tryCatchBlocks: 0 } },
+  it("establishes invariant when sample size >= 5 and dominance >= 75%", () => {
+    const fns = [
+      { name: "f1", line: 1, errorStrategy: "result-pattern" as const },
+      { name: "f2", line: 5, errorStrategy: "result-pattern" as const },
+      { name: "f3", line: 10, errorStrategy: "result-pattern" as const },
+      { name: "f4", line: 15, errorStrategy: "result-pattern" as const },
+      { name: "f5", line: 20, errorStrategy: "throw" as const },
     ];
-    const result = discoverInvariants(signatures, { dominanceThreshold: 0.75 });
+    const signatures: FileSignature[] = [{
+      filePath: "src/services/users.service.ts",
+      layer: "service",
+      imports: [],
+      globalCalls: [],
+      functions: fns,
+      hasParseErrors: false
+    }];
+    const result = discoverInvariants(signatures, { minSampleSize: 5, dominanceThreshold: 0.75 });
+    expect(result.dominantInvariants).toHaveLength(1);
+    expect(result.dominantInvariants[0].dominantPattern).toBe("result-pattern");
+    expect(result.dominantInvariants[0].confidence).toBe(0.8);
+  });
+
+  it("flags unresolved divergence when split is high (e.g. 50/50)", () => {
+    const fns = [
+      { name: "f1", line: 1, errorStrategy: "throw" as const },
+      { name: "f2", line: 5, errorStrategy: "throw" as const },
+      { name: "f3", line: 10, errorStrategy: "throw" as const },
+      { name: "f4", line: 15, errorStrategy: "result-pattern" as const },
+      { name: "f5", line: 20, errorStrategy: "result-pattern" as const },
+      { name: "f6", line: 25, errorStrategy: "result-pattern" as const },
+    ];
+    const signatures: FileSignature[] = [{
+      filePath: "src/services/split.service.ts",
+      layer: "service",
+      imports: [],
+      globalCalls: [],
+      functions: fns,
+      hasParseErrors: false
+    }];
+    const result = discoverInvariants(signatures, { minSampleSize: 5, dominanceThreshold: 0.75 });
     expect(result.dominantInvariants).toHaveLength(0);
     expect(result.unresolvedDivergences).toHaveLength(1);
-    expect(result.unresolvedDivergences[0].type).toBe("error-handling");
   });
 });
 ```
@@ -195,13 +298,12 @@ describe("Invariant Discovery", () => {
 Run: `npm test tests/core/invariants.test.ts`
 Expected: FAIL (`discoverInvariants` not defined)
 
-- [ ] **Step 3: Implement `discoverInvariants` algorithm**
-Compute cluster counts for:
-1. Error handling strategy per layer.
-2. Layer boundary imports (e.g. whether services ever import UI components).
-3. Primary HTTP/State/Validation libraries used across the project.
-If ratio >= threshold (default 75%), emit `dominantInvariant`.
-If ratio < threshold and multiple patterns present, emit `unresolvedDivergence`.
+- [ ] **Step 3: Implement invariant discovery clustering**
+Cluster across:
+1. Error strategy per layer.
+2. HTTP client / Library roles across files.
+3. Layer import permissions.
+Enforce `minSampleSize = 5` and `dominanceThreshold = 0.75`.
 
 - [ ] **Step 4: Run test to verify it passes**
 Run: `npm test tests/core/invariants.test.ts`
@@ -210,7 +312,7 @@ Expected: PASS
 - [ ] **Step 5: Commit**
 ```bash
 git add src/core/invariants.ts tests/core/invariants.test.ts
-git commit -m "feat(core): implement invariant discovery and divergence detector"
+git commit -m "feat(core): implement statistical invariant clustering with sample thresholds"
 ```
 
 ---
@@ -225,36 +327,47 @@ git commit -m "feat(core): implement invariant discovery and divergence detector
 - Consumes: `FileSignature[]`, `Invariant[]`
 - Produces: `Outlier[]`
   - `filePath: string`
+  - `functionName: string`
+  - `line: number`
   - `ruleId: string`
-  - `violation: string`
+  - `observed: string`
   - `expected: string`
-  - `confidence: number`
+  - `codeSnippet: string`
 
-- [ ] **Step 1: Write failing test for detecting outliers against invariants**
+- [ ] **Step 1: Write failing test for detecting outliers**
 ```typescript
 // tests/core/outliers.test.ts
 import { describe, it, expect } from "vitest";
 import { detectOutliers } from "../../src/core/outliers.js";
-import { FileSignature, Invariant } from "../../src/core/types.js";
+import { Invariant, FileSignature } from "../../src/core/types.js";
 
-describe("Outlier Detection", () => {
-  it("flags files that violate dominant invariant", () => {
-    const invariants: Invariant[] = [{
-      id: "inv-err-services",
+describe("Outlier Detector", () => {
+  it("detects functions violating the dominant invariant", () => {
+    const invariant: Invariant = {
+      id: "inv-service-error",
       type: "error-handling",
       layer: "service",
       dominantPattern: "result-pattern",
       description: "Services must return Result<T, E>",
-      confidence: 0.9,
-    }];
-    const signatures: FileSignature[] = [
-      { filePath: "src/services/good.ts", layer: "service", imports: [], errorHandling: { throws: 0, returnsResult: 2, tryCatchBlocks: 0 } },
-      { filePath: "src/services/bad.ts", layer: "service", imports: [], errorHandling: { throws: 1, returnsResult: 0, tryCatchBlocks: 0 } },
-    ];
-    const outliers = detectOutliers(signatures, invariants);
+      confidence: 0.85,
+      sampleSize: 10
+    };
+    const signature: FileSignature = {
+      filePath: "src/services/rogue.service.ts",
+      layer: "service",
+      imports: [],
+      globalCalls: [],
+      functions: [
+        { name: "normalFn", line: 5, errorStrategy: "result-pattern" },
+        { name: "rogueFn", line: 20, errorStrategy: "throw" }
+      ],
+      hasParseErrors: false
+    };
+    const outliers = detectOutliers([signature], [invariant]);
     expect(outliers).toHaveLength(1);
-    expect(outliers[0].filePath).toBe("src/services/bad.ts");
-    expect(outliers[0].ruleId).toBe("inv-err-services");
+    expect(outliers[0].functionName).toBe("rogueFn");
+    expect(outliers[0].line).toBe(20);
+    expect(outliers[0].expected).toBe("result-pattern");
   });
 });
 ```
@@ -264,7 +377,7 @@ Run: `npm test tests/core/outliers.test.ts`
 Expected: FAIL (`detectOutliers` not defined)
 
 - [ ] **Step 3: Implement `detectOutliers`**
-Matches file signatures against active invariants. Emits candidate outliers with severity and contextual details.
+Compare signatures against active invariants. Collect matching positive examples for each invariant to aid semantic verification.
 
 - [ ] **Step 4: Run test to verify it passes**
 Run: `npm test tests/core/outliers.test.ts`
@@ -278,53 +391,83 @@ git commit -m "feat(core): implement candidate outlier detection engine"
 
 ---
 
-### Task 5: Targeted Semantic LLM Verifier
+### Task 5: Targeted Semantic LLM Verifier (with Positive Exemplars)
 
 **Files:**
 - Create: `src/core/verifier.ts`
 - Test: `tests/core/verifier.test.ts`
 
 **Interfaces:**
-- Consumes: `Outlier`, source code of outlier, invariant description
+- Consumes: `Outlier`, outlier code snippet, positive repository example, optional LLM client
 - Produces: `VerifiedViolation`
   - `isTruePositive: boolean`
+  - `confidence: number`
   - `reasoning: string`
   - `suggestedRemediation: string`
 
-- [ ] **Step 1: Write failing test with mock LLM client**
+- [ ] **Step 1: Write failing test with mock LLM client and exemplar context**
 ```typescript
 // tests/core/verifier.test.ts
 import { describe, it, expect } from "vitest";
-import { verifyOutlierWithLLM } from "../../src/core/verifier.js";
+import { verifyOutlier } from "../../src/core/verifier.js";
 
-describe("Semantic LLM Verifier", () => {
-  it("filters false positives when LLM determines outlier is an intentional exception", async () => {
+describe("Targeted Semantic Verifier", () => {
+  it("verifies true violation when code clearly violates standard", async () => {
     const mockClient = {
       complete: async () => JSON.stringify({
-        isTruePositive: false,
-        reasoning: "This file is a test helper, so throwing raw errors is acceptable.",
-        suggestedRemediation: ""
+        isTruePositive: true,
+        confidence: 0.95,
+        reasoning: "The function throws a raw Error instead of returning Result<T, E> like standard service methods.",
+        suggestedRemediation: "Refactor to return Result.err(new AppError(...))"
       })
     };
-    const result = await verifyOutlierWithLLM(
-      { filePath: "tests/helpers/throw.ts", ruleId: "inv-err", violation: "Throws error", expected: "Result", confidence: 0.9 },
-      "function fail() { throw new Error(); }",
-      "Services should return Result",
+    const res = await verifyOutlier(
+      {
+        filePath: "src/services/user.service.ts",
+        functionName: "getUser",
+        line: 15,
+        ruleId: "inv-err",
+        observed: "throw",
+        expected: "result-pattern",
+        codeSnippet: "function getUser() { throw new Error(); }"
+      },
+      "function goodUser(): Result<User, Error> { return ok(user); }",
       mockClient
     );
-    expect(result.isTruePositive).toBe(false);
+    expect(res.isTruePositive).toBe(true);
+    expect(res.suggestedRemediation).toContain("Result.err");
+  });
+
+  it("falls back to AST finding when LLM is unavailable or offline", async () => {
+    const res = await verifyOutlier(
+      {
+        filePath: "src/services/user.service.ts",
+        functionName: "getUser",
+        line: 15,
+        ruleId: "inv-err",
+        observed: "throw",
+        expected: "result-pattern",
+        codeSnippet: "function getUser() { throw new Error(); }"
+      },
+      undefined,
+      undefined // No LLM client
+    );
+    expect(res.isTruePositive).toBe(true);
+    expect(res.reasoning).toContain("AST-only mode");
   });
 });
 ```
 
 - [ ] **Step 2: Run test to verify it fails**
 Run: `npm test tests/core/verifier.test.ts`
-Expected: FAIL
+Expected: FAIL (`verifyOutlier` not defined)
 
-- [ ] **Step 3: Implement `verifyOutlierWithLLM`**
-Supports pluggable completion client (Anthropic / Ollama / OpenAI-compatible / Mock).
-Constructs compact prompt with invariant rule + outlier code.
-Parses JSON response and returns `VerifiedViolation`.
+- [ ] **Step 3: Implement `verifyOutlier` with Anthropic API / Ollama / OpenAI adapter**
+Build structured prompt containing:
+1. Active Invariant Rule
+2. Exemplary Code Snippet from the repository (the "gold standard")
+3. Outlier Code Snippet
+Handle JSON parse errors and network timeouts with graceful fallback to AST verdict.
 
 - [ ] **Step 4: Run test to verify it passes**
 Run: `npm test tests/core/verifier.test.ts`
@@ -333,60 +476,70 @@ Expected: PASS
 - [ ] **Step 5: Commit**
 ```bash
 git add src/core/verifier.ts tests/core/verifier.test.ts
-git commit -m "feat(core): implement targeted LLM semantic verifier"
+git commit -m "feat(core): implement semantic LLM verifier with exemplar prompts and offline fallback"
 ```
 
 ---
 
-### Task 6: Rules Exporter (`CLAUDE.md`, `.cursorrules`, `.windsurfrules`)
+### Task 6: Modern Agent Rules Exporter (`AGENTS.md` & `CLAUDE.md`)
 
 **Files:**
 - Create: `src/core/exporter.ts`
 - Test: `tests/core/exporter.test.ts`
 
 **Interfaces:**
-- Consumes: `Invariant[]`, target directory
-- Produces: Updated `.cursorrules` / `CLAUDE.md` containing delimited Semvibe architectural rules
+- Consumes: `Invariant[]`, target directory path
+- Produces: Updated `AGENTS.md` and/or `CLAUDE.md`
 
-- [ ] **Step 1: Write failing test for rules export**
+- [ ] **Step 1: Write failing tests for idempotent rules sync**
 ```typescript
 // tests/core/exporter.test.ts
 import { describe, it, expect } from "vitest";
-import { generateRulesMarkdown, syncRulesToFile } from "../../src/core/exporter.js";
+import { formatRulesMarkdown, syncRulesIntoFile } from "../../src/core/exporter.js";
 import { Invariant } from "../../src/core/types.js";
 
-describe("Rules Exporter", () => {
-  it("formats invariants into clear markdown block", () => {
+describe("Agent Rules Exporter", () => {
+  it("formats invariants into clean Markdown rules", () => {
     const invariants: Invariant[] = [{
       id: "inv-1",
       type: "error-handling",
-      dominantPattern: "Result<T, E>",
-      description: "All services in src/services must return Result<T, E>",
-      confidence: 0.95
+      layer: "service",
+      dominantPattern: "result-pattern",
+      description: "All services must return Result<T, AppError>",
+      confidence: 0.9,
+      sampleSize: 8
     }];
-    const md = generateRulesMarkdown(invariants);
+    const md = formatRulesMarkdown(invariants);
     expect(md).toContain("<!-- SEMVIBE:START -->");
-    expect(md).toContain("All services in src/services must return Result<T, E>");
+    expect(md).toContain("### Architectural Invariants (Enforced by Semvibe)");
+    expect(md).toContain("All services must return Result<T, AppError>");
     expect(md).toContain("<!-- SEMVIBE:END -->");
   });
 
-  it("updates existing file between markers without erasing other user instructions", () => {
-    const existing = "# My Custom Instructions\n\n<!-- SEMVIBE:START -->\nOld rules\n<!-- SEMVIBE:END -->\n\nOther notes";
-    const updated = syncRulesToFile(existing, "New rules");
-    expect(updated).toContain("# My Custom Instructions");
-    expect(updated).toContain("New rules");
-    expect(updated).not.toContain("Old rules");
-    expect(updated).toContain("Other notes");
+  it("updates rules between markers in existing file without deleting user notes", () => {
+    const original = "# Project Rules\nDo not use any.\n\n<!-- SEMVIBE:START -->\nOld\n<!-- SEMVIBE:END -->\n\nKeep this!";
+    const result = syncRulesIntoFile(original, "New Rule Content");
+    expect(result).toContain("# Project Rules");
+    expect(result).toContain("New Rule Content");
+    expect(result).not.toContain("Old");
+    expect(result).toContain("Keep this!");
+  });
+
+  it("appends rules with markers when file exists without markers", () => {
+    const original = "# Project Rules\nExisting text.";
+    const result = syncRulesIntoFile(original, "New Rule Content");
+    expect(result).toContain("Existing text.");
+    expect(result).toContain("<!-- SEMVIBE:START -->\nNew Rule Content\n<!-- SEMVIBE:END -->");
   });
 });
 ```
 
 - [ ] **Step 2: Run test to verify it fails**
 Run: `npm test tests/core/exporter.test.ts`
-Expected: FAIL
+Expected: FAIL (`formatRulesMarkdown` not defined)
 
-- [ ] **Step 3: Implement `generateRulesMarkdown` and `syncRulesToFile`**
-Inserts or updates delimited Semvibe section. Handles creating files if they do not exist.
+- [ ] **Step 3: Implement `formatRulesMarkdown` and `syncRulesIntoFile`**
+Target primary files: `AGENTS.md` and `CLAUDE.md` (and optionally `.cursor/rules/architecture.mdc`).
 
 - [ ] **Step 4: Run test to verify it passes**
 Run: `npm test tests/core/exporter.test.ts`
@@ -395,37 +548,42 @@ Expected: PASS
 - [ ] **Step 5: Commit**
 ```bash
 git add src/core/exporter.ts tests/core/exporter.test.ts
-git commit -m "feat(core): implement rules exporter for cursorrules and CLAUDE.md"
+git commit -m "feat(core): implement modern agent rules exporter for AGENTS.md and CLAUDE.md"
 ```
 
 ---
 
-### Task 7: CLI Commands & Terminal UI Integration
+### Task 7: CLI Commands & Interactive Terminal UI
 
 **Files:**
 - Modify: `src/cli.ts`
 - Modify: `src/reporter.ts`
-- Create: `tests/integration/cli.test.ts`
+- Create: `src/core/pipeline.ts`
+- Test: `tests/integration/cli.test.ts`
 
 **Interfaces:**
-- Consumes: Commander CLI options
-- Produces:
+- Consumes: User command invocations:
   - `semvibe learn [dir]`
-  - `semvibe scan [dir]`
+  - `semvibe scan [dir] [--ast-only]`
   - `semvibe export-rules [dir]`
+- Produces: Terminal UI output and `.semvibe/invariants.json`
 
-- [ ] **Step 1: Write integration test for CLI scan and learn commands**
+- [ ] **Step 1: Write integration tests with a fixture repository**
 ```typescript
 // tests/integration/cli.test.ts
 import { describe, it, expect } from "vitest";
-import { runScanPipeline, runLearnPipeline } from "../../src/core/pipeline.js";
+import { runLearn, runScan, runExportRules } from "../../src/core/pipeline.js";
+import { resolve } from "path";
 
-describe("Semvibe CLI Pipeline Integration", () => {
-  it("runs learn and scan pipeline against sample project", async () => {
-    const learnResult = await runLearnPipeline("src");
-    expect(learnResult).toBeDefined();
-    const scanResult = await runScanPipeline("src", { astOnly: true });
-    expect(scanResult.outliers).toBeDefined();
+describe("CLI Pipelines", () => {
+  it("runs learn pipeline and extracts candidate invariants", async () => {
+    const res = await runLearn(resolve("tests/fixtures/sample-repo"));
+    expect(res.invariants).toBeDefined();
+  });
+
+  it("runs scan pipeline and flags known violations", async () => {
+    const res = await runScan(resolve("tests/fixtures/sample-repo"), { astOnly: true });
+    expect(res.violations.length).toBeGreaterThan(0);
   });
 });
 ```
@@ -434,16 +592,65 @@ describe("Semvibe CLI Pipeline Integration", () => {
 Run: `npm test tests/integration/cli.test.ts`
 Expected: FAIL
 
-- [ ] **Step 3: Implement `src/core/pipeline.ts`, wire up `src/cli.ts` and `src/reporter.ts`**
-Add commands `learn`, `scan`, `export-rules` in `cli.ts`.
-Connect terminal reporter with clean tables, confidence scores, and instructions.
+- [ ] **Step 3: Create fixture repo and implement `src/core/pipeline.ts`, `src/cli.ts`, and `src/reporter.ts`**
+Create `tests/fixtures/sample-repo` with 5 standard service files returning `Result` and 1 rogue file throwing raw error.
+Implement interactive confirmation prompt for `learn` (`Save to .semvibe/invariants.json?`).
+Wire up colorful terminal reporting with Ora spinners and Chalk tables.
 
-- [ ] **Step 4: Run all tests and build project**
-Run: `npm test && npm run build`
-Expected: PASS (all unit and integration tests passing, tsc builds cleanly)
+- [ ] **Step 4: Run test and verify it passes**
+Run: `npm test tests/integration/cli.test.ts`
+Expected: PASS
 
 - [ ] **Step 5: Commit**
 ```bash
-git add src/cli.ts src/reporter.ts src/core/pipeline.ts tests/integration/cli.test.ts
-git commit -m "feat(cli): complete Phase 1 CLI commands learn, scan, and export-rules"
+git add src/cli.ts src/reporter.ts src/core/pipeline.ts tests/fixtures/ tests/integration/cli.test.ts
+git commit -m "feat(cli): complete CLI suite for learn, scan, and export-rules"
+```
+
+---
+
+### Task 8: Evaluation Benchmark Runner & Go/No-Go Gate
+
+**Files:**
+- Create: `scripts/benchmark.ts`
+- Create: `tests/benchmark/dataset.json`
+- Test: `tests/benchmark/eval.test.ts`
+
+**Interfaces:**
+- Consumes: 5 open-source repository slices + 50 manually labeled ground-truth findings
+- Produces: Benchmark evaluation report:
+  - `precision: number` (Target: ≥ 80%)
+  - `recall: number`
+  - `tokenSavingsVsFullLLM: string`
+  - `comparisonVsDrift: string`
+
+- [ ] **Step 1: Create labeled benchmark dataset (`tests/benchmark/dataset.json`)**
+50 ground-truth samples (30 genuine violations, 20 intentional exceptions across real TypeScript codebases).
+
+- [ ] **Step 2: Write evaluation test asserting Precision ≥ 80%**
+```typescript
+// tests/benchmark/eval.test.ts
+import { describe, it, expect } from "vitest";
+import { runBenchmarkSuite } from "../../scripts/benchmark.js";
+
+describe("Phase 1 Quality Gate Benchmark", () => {
+  it("achieves Precision >= 80% on labeled architectural findings", async () => {
+    const report = await runBenchmarkSuite();
+    console.log("Benchmark Summary:", report);
+    expect(report.precision).toBeGreaterThanOrEqual(0.80);
+  });
+});
+```
+
+- [ ] **Step 3: Implement `scripts/benchmark.ts`**
+Runs Semvibe AST + LLM on dataset. Computes True Positives, False Positives, False Negatives, Precision, and Recall.
+
+- [ ] **Step 4: Run benchmark and verify gate passes**
+Run: `npm test tests/benchmark/eval.test.ts`
+Expected: PASS (Precision ≥ 80%)
+
+- [ ] **Step 5: Commit and record results**
+```bash
+git add scripts/benchmark.ts tests/benchmark/
+git commit -m "test(benchmark): implement benchmark runner and verify precision gate >= 80%"
 ```
