@@ -1,0 +1,13 @@
+- Scanning /Users/sidzuya/.gemini/antigravity-ide/scratch/semvibe/benchmark/repos/next-saas-starter for architectural drift...
+✔ Semantic scan complete.
+
+╔══════════════════════════════════════════════════════════╗
+║                 semvibe · semantic scan                  ║
+╚══════════════════════════════════════════════════════════╝
+
+  Scanned:    /Users/sidzuya/.gemini/antigravity-ide/scratch/semvibe/benchmark/repos/next-saas-starter
+  Files:      0
+  Invariants: 0
+
+  ✅ No architectural inconsistencies detected! Codebase is aligned.
+

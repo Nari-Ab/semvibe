@@ -1,0 +1,45 @@
+{
+  "sampleSize": 60,
+  "concordance": {
+    "po": 100,
+    "pe": 37.5,
+    "kappa": 1
+  },
+  "semvibe": {
+    "total": 25,
+    "tp": 9,
+    "fpIntentional": 16,
+    "fpNoise": 0,
+    "strictPrecision": {
+      "k": 9,
+      "n": 25,
+      "p": 36,
+      "low": 20.2,
+      "high": 55.5
+    },
+    "actionablePrecision": {
+      "k": 9,
+      "n": 9,
+      "p": 100,
+      "low": 70.1,
+      "high": 100
+    }
+  },
+  "drift": {
+    "total": 35,
+    "tp": 3,
+    "fpIntentional": 0,
+    "fpNoise": 32,
+    "strictPrecision": {
+      "k": 3,
+      "n": 35,
+      "p": 8.6,
+      "low": 3,
+      "high": 22.4
+    }
+  },
+  "uniqueTPs": {
+    "semvibeOnly": 9,
+    "driftOnly": 3
+  }
+}

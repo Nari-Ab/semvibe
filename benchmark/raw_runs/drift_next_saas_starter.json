@@ -1,0 +1,299 @@
+[
+  {
+    "rule_id": "cohesion_deficit",
+    "signal_type": "cohesion_deficit",
+    "file_path": "app/(dashboard)/dashboard/general/page.tsx",
+    "start_line": 1,
+    "title": "Cohesion deficit in app/(dashboard)/dashboard/general/page.tsx",
+    "description": "3/6 semantic units are isolated (mean best similarity=0.33, isolation ratio=0.50).",
+    "severity": "medium"
+  },
+  {
+    "rule_id": "cohesion_deficit",
+    "signal_type": "cohesion_deficit",
+    "file_path": "app/(dashboard)/dashboard/page.tsx",
+    "start_line": 1,
+    "title": "Cohesion deficit in app/(dashboard)/dashboard/page.tsx",
+    "description": "4/10 semantic units are isolated (mean best similarity=0.35, isolation ratio=0.40).",
+    "severity": "medium"
+  },
+  {
+    "rule_id": "cohesion_deficit",
+    "signal_type": "cohesion_deficit",
+    "file_path": "app/(dashboard)/layout.tsx",
+    "start_line": 1,
+    "title": "Cohesion deficit in app/(dashboard)/layout.tsx",
+    "description": "5/5 semantic units are isolated (mean best similarity=0.00, isolation ratio=1.00).",
+    "severity": "high"
+  },
+  {
+    "rule_id": "cohesion_deficit",
+    "signal_type": "cohesion_deficit",
+    "file_path": "lib/auth/session.ts",
+    "start_line": 1,
+    "title": "Cohesion deficit in lib/auth/session.ts",
+    "description": "2/7 semantic units are isolated (mean best similarity=0.52, isolation ratio=0.29).",
+    "severity": "low"
+  },
+  {
+    "rule_id": "cohesion_deficit",
+    "signal_type": "cohesion_deficit",
+    "file_path": "lib/db/queries.ts",
+    "start_line": 1,
+    "title": "Cohesion deficit in lib/db/queries.ts",
+    "description": "1/6 semantic units are isolated (mean best similarity=0.29, isolation ratio=0.17).",
+    "severity": "low"
+  },
+  {
+    "rule_id": "cohesion_deficit",
+    "signal_type": "cohesion_deficit",
+    "file_path": "lib/db/setup.ts",
+    "start_line": 1,
+    "title": "Cohesion deficit in lib/db/setup.ts",
+    "description": "2/8 semantic units are isolated (mean best similarity=0.18, isolation ratio=0.25).",
+    "severity": "medium"
+  },
+  {
+    "rule_id": "dead_code_accumulation",
+    "signal_type": "dead_code_accumulation",
+    "file_path": "app/(dashboard)/dashboard/activity/page.tsx",
+    "start_line": 30,
+    "title": "3 potentially unused exports in page.tsx",
+    "description": "app/(dashboard)/dashboard/activity/page.tsx exports 3/3 public symbols that are never imported elsewhere: getRelativeTime, formatAction, ActivityPage. Dead code increases maintenance cost and confuses contributors.",
+    "severity": "high"
+  },
+  {
+    "rule_id": "dead_code_accumulation",
+    "signal_type": "dead_code_accumulation",
+    "file_path": "app/(dashboard)/dashboard/general/page.tsx",
+    "start_line": 14,
+    "title": "5 potentially unused exports in page.tsx",
+    "description": "app/(dashboard)/dashboard/general/page.tsx exports 5/6 public symbols that are never imported elsewhere: fetcher, AccountForm, AccountFormWithData, GeneralPage, AccountFormProps. Dead code increases maintenance cost and confuses contributors.",
+    "severity": "high"
+  },
+  {
+    "rule_id": "dead_code_accumulation",
+    "signal_type": "dead_code_accumulation",
+    "file_path": "app/(dashboard)/dashboard/page.tsx",
+    "start_line": 28,
+    "title": "9 potentially unused exports in page.tsx",
+    "description": "app/(dashboard)/dashboard/page.tsx exports 9/10 public symbols that are never imported elsewhere: fetcher, SubscriptionSkeleton, ManageSubscription, TeamMembersSkeleton, TeamMembers, getUserDisplayName, InviteTeamMemberSkeleton, InviteTeamMember, SettingsPage. Dead code increases maintenance cost and confuses contributors.",
+    "severity": "high"
+  },
+  {
+    "rule_id": "dead_code_accumulation",
+    "signal_type": "dead_code_accumulation",
+    "file_path": "app/(dashboard)/layout.tsx",
+    "start_line": 19,
+    "title": "5 potentially unused exports in layout.tsx",
+    "description": "app/(dashboard)/layout.tsx exports 5/5 public symbols that are never imported elsewhere: fetcher, UserMenu, handleSignOut, Header, Layout. Dead code increases maintenance cost and confuses contributors.",
+    "severity": "high"
+  },
+  {
+    "rule_id": "dead_code_accumulation",
+    "signal_type": "dead_code_accumulation",
+    "file_path": "app/(dashboard)/dashboard/security/page.tsx",
+    "start_line": 25,
+    "title": "3 potentially unused exports in page.tsx",
+    "description": "app/(dashboard)/dashboard/security/page.tsx exports 3/3 public symbols that are never imported elsewhere: SecurityPage, PasswordState, DeleteState. Dead code increases maintenance cost and confuses contributors.",
+    "severity": "high"
+  },
+  {
+    "rule_id": "dead_code_accumulation",
+    "signal_type": "dead_code_accumulation",
+    "file_path": "app/(dashboard)/pricing/page.tsx",
+    "start_line": 9,
+    "title": "2 potentially unused exports in page.tsx",
+    "description": "app/(dashboard)/pricing/page.tsx exports 2/2 public symbols that are never imported elsewhere: PricingPage, PricingCard. Dead code increases maintenance cost and confuses contributors.",
+    "severity": "high"
+  },
+  {
+    "rule_id": "dead_code_accumulation",
+    "signal_type": "dead_code_accumulation",
+    "file_path": "components/ui/card.tsx",
+    "start_line": 41,
+    "title": "2 potentially unused exports in card.tsx",
+    "description": "components/ui/card.tsx exports 2/7 public symbols that are never imported elsewhere: CardDescription, CardAction. Dead code increases maintenance cost and confuses contributors.",
+    "severity": "medium"
+  },
+  {
+    "rule_id": "dead_code_accumulation",
+    "signal_type": "dead_code_accumulation",
+    "file_path": "components/ui/dropdown-menu.tsx",
+    "start_line": 15,
+    "title": "11 potentially unused exports in dropdown-menu.tsx",
+    "description": "components/ui/dropdown-menu.tsx exports 11/15 public symbols that are never imported elsewhere: DropdownMenuPortal, DropdownMenuGroup, DropdownMenuCheckboxItem, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuShortcut, DropdownMenuSub, DropdownMenuSubTrigger\u2026. Dead code increases maintenance cost and confuses contributors.",
+    "severity": "high"
+  },
+  {
+    "rule_id": "dead_code_accumulation",
+    "signal_type": "dead_code_accumulation",
+    "file_path": "lib/db/schema.ts",
+    "start_line": 119,
+    "title": "4 potentially unused exports in schema.ts",
+    "description": "lib/db/schema.ts exports 4/11 public symbols that are never imported elsewhere: TeamMember, ActivityLog, Invitation, NewInvitation. Dead code increases maintenance cost and confuses contributors.",
+    "severity": "medium"
+  },
+  {
+    "rule_id": "doc_impl_drift",
+    "signal_type": "doc_impl_drift",
+    "file_path": "components",
+    "start_line": 1,
+    "title": "Source directory not mentioned in README: components/",
+    "description": "Directory 'components/' contains source files but is not mentioned in README.",
+    "severity": "info"
+  },
+  {
+    "rule_id": "explainability_deficit",
+    "signal_type": "explainability_deficit",
+    "file_path": "app/(dashboard)/dashboard/activity/page.tsx",
+    "start_line": 44,
+    "title": "Unexplained complexity: formatAction",
+    "description": "Complexity: 11, LOC: 26. No docstring. No corresponding test found.",
+    "severity": "low"
+  },
+  {
+    "rule_id": "explainability_deficit",
+    "signal_type": "explainability_deficit",
+    "file_path": "app/(dashboard)/dashboard/page.tsx",
+    "start_line": 96,
+    "title": "Unexplained complexity: TeamMembers",
+    "description": "Complexity: 7, LOC: 83. No docstring. No corresponding test found. No return type annotation.",
+    "severity": "low"
+  },
+  {
+    "rule_id": "explainability_deficit",
+    "signal_type": "explainability_deficit",
+    "file_path": "app/(dashboard)/dashboard/page.tsx",
+    "start_line": 190,
+    "title": "Unexplained complexity: InviteTeamMember",
+    "description": "Complexity: 6, LOC: 81. No docstring. No corresponding test found. No return type annotation.",
+    "severity": "low"
+  },
+  {
+    "rule_id": "explainability_deficit",
+    "signal_type": "explainability_deficit",
+    "file_path": "app/(dashboard)/dashboard/security/page.tsx",
+    "start_line": 25,
+    "title": "Unexplained complexity: SecurityPage",
+    "description": "Complexity: 6, LOC: 143. No docstring. No corresponding test found. No return type annotation.",
+    "severity": "low"
+  },
+  {
+    "rule_id": "explainability_deficit",
+    "signal_type": "explainability_deficit",
+    "file_path": "app/(dashboard)/pricing/page.tsx",
+    "start_line": 9,
+    "title": "Unexplained complexity: PricingPage",
+    "description": "Complexity: 9, LOC: 43. No docstring. No corresponding test found. No return type annotation.",
+    "severity": "low"
+  },
+  {
+    "rule_id": "explainability_deficit",
+    "signal_type": "explainability_deficit",
+    "file_path": "app/(login)/login.tsx",
+    "start_line": 13,
+    "title": "Unexplained complexity: Login",
+    "description": "Complexity: 15, LOC: 130. No docstring. No corresponding test found. No return type annotation.",
+    "severity": "high"
+  },
+  {
+    "rule_id": "explainability_deficit",
+    "signal_type": "explainability_deficit",
+    "file_path": "app/api/stripe/checkout/route.ts",
+    "start_line": 9,
+    "title": "Unexplained complexity: GET",
+    "description": "Complexity: 12, LOC: 89. No docstring. No corresponding test found. No return type annotation.",
+    "severity": "medium"
+  },
+  {
+    "rule_id": "explainability_deficit",
+    "signal_type": "explainability_deficit",
+    "file_path": "lib/db/queries.ts",
+    "start_line": 7,
+    "title": "Unexplained complexity: getUser",
+    "description": "Complexity: 8, LOC: 31. No docstring. No corresponding test found. No return type annotation.",
+    "severity": "low"
+  },
+  {
+    "rule_id": "explainability_deficit",
+    "signal_type": "explainability_deficit",
+    "file_path": "lib/payments/stripe.ts",
+    "start_line": 49,
+    "title": "Unexplained complexity: createCustomerPortalSession",
+    "description": "Complexity: 7, LOC: 67. No docstring. No corresponding test found. No return type annotation.",
+    "severity": "low"
+  },
+  {
+    "rule_id": "explainability_deficit",
+    "signal_type": "explainability_deficit",
+    "file_path": "lib/payments/stripe.ts",
+    "start_line": 117,
+    "title": "Unexplained complexity: handleSubscriptionChange",
+    "description": "Complexity: 7, LOC: 31. No docstring. No corresponding test found. No return type annotation.",
+    "severity": "low"
+  },
+  {
+    "rule_id": "explainability_deficit",
+    "signal_type": "explainability_deficit",
+    "file_path": "middleware.ts",
+    "start_line": 7,
+    "title": "Unexplained complexity: middleware",
+    "description": "Complexity: 7, LOC: 38. No docstring. No corresponding test found. No return type annotation.",
+    "severity": "low"
+  },
+  {
+    "rule_id": "naming_contract_violation",
+    "signal_type": "naming_contract_violation",
+    "file_path": "lib/db/setup.ts",
+    "start_line": 25,
+    "title": "Naming contract violation: checkStripeCLI()",
+    "description": "Function 'checkStripeCLI' has prefix 'check_' but does not satisfy the expected contract: validate_*/check_* expects at least one raise or return False/None.",
+    "severity": "medium"
+  },
+  {
+    "rule_id": "pattern_fragmentation",
+    "signal_type": "pattern_fragmentation",
+    "file_path": "lib/db",
+    "start_line": 1,
+    "title": "error_handling: 5 variants in lib/db/",
+    "description": "5 error_handling variants in lib/db/ (2/6 use canonical pattern).\n  - lib/db/setup.ts:29 (checkStripeCLI)\n  - lib/db/setup.ts:34 (checkStripeCLI)\n  - lib/db/setup.ts:100 (setupLocalPostgres)",
+    "severity": "high"
+  },
+  {
+    "rule_id": "type_safety_bypass",
+    "signal_type": "type_safety_bypass",
+    "file_path": "app/api/stripe/webhook/route.ts",
+    "start_line": 5,
+    "title": "1 type safety bypass in route.ts",
+    "description": "app/api/stripe/webhook/route.ts contains 1 type safety bypass pattern(s): 1\u00d7 non_null_assertion. These weaken TypeScript's type guarantees and can mask bugs at compile time.",
+    "severity": "low"
+  },
+  {
+    "rule_id": "type_safety_bypass",
+    "signal_type": "type_safety_bypass",
+    "file_path": "drizzle.config.ts",
+    "start_line": 8,
+    "title": "1 type safety bypass in drizzle.config.ts",
+    "description": "drizzle.config.ts contains 1 type safety bypass pattern(s): 1\u00d7 non_null_assertion. These weaken TypeScript's type guarantees and can mask bugs at compile time.",
+    "severity": "low"
+  },
+  {
+    "rule_id": "type_safety_bypass",
+    "signal_type": "type_safety_bypass",
+    "file_path": "lib/auth/session.ts",
+    "start_line": 49,
+    "title": "1 type safety bypass in session.ts",
+    "description": "lib/auth/session.ts contains 1 type safety bypass pattern(s): 1\u00d7 non_null_assertion. These weaken TypeScript's type guarantees and can mask bugs at compile time.",
+    "severity": "low"
+  },
+  {
+    "rule_id": "type_safety_bypass",
+    "signal_type": "type_safety_bypass",
+    "file_path": "lib/payments/stripe.ts",
+    "start_line": 10,
+    "title": "2 type safety bypasses in stripe.ts",
+    "description": "lib/payments/stripe.ts contains 2 type safety bypass pattern(s): 2\u00d7 non_null_assertion. These weaken TypeScript's type guarantees and can mask bugs at compile time.",
+    "severity": "medium"
+  }
+]

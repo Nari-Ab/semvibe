@@ -1,0 +1,11 @@
+
+╔══════════════════════════════════════════════════════════╗
+║                 semvibe · semantic scan                  ║
+╚══════════════════════════════════════════════════════════╝
+
+  Scanned:    /Users/sidzuya/.gemini/antigravity-ide/scratch/semvibe/benchmark/repos/create-t3-app/cli/src
+  Files:      0
+  Invariants: 0
+
+  ✅ No architectural inconsistencies detected! Codebase is aligned.
+

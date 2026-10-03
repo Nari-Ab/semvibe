@@ -1,0 +1,316 @@
+[
+  {
+    "repo": "dubinc/dub",
+    "slicePath": "benchmark/repos/dub/apps/web",
+    "totalFilesScanned": 3768,
+    "conventions": {
+      "errorHandling": {
+        "dominant": "throw (1563)",
+        "dominantCount": 1563,
+        "minorityCount": 21,
+        "minorityMatches": [
+          {
+            "file": "app/(ee)/api/admin/impersonate/route.ts",
+            "line": 131,
+            "text": "return { error: \"Invalid email\" };"
+          },
+          {
+            "file": "app/(ee)/api/admin/impersonate/route.ts",
+            "line": 377,
+            "text": "return { error: \"User not found\" };"
+          },
+          {
+            "file": "app/(ee)/api/admin/impersonate/route.ts",
+            "line": 396,
+            "text": "return { error: \"Domain not found\" };"
+          },
+          {
+            "file": "app/(ee)/api/admin/impersonate/route.ts",
+            "line": 400,
+            "text": "return { error: \"Domain is not attached to a workspace\" };"
+          },
+          {
+            "file": "app/(ee)/api/admin/impersonate/route.ts",
+            "line": 405,
+            "text": "return { error: \"Workspace owner not found\" };"
+          },
+          {
+            "file": "app/(ee)/api/admin/impersonate/route.ts",
+            "line": 422,
+            "text": "return { error: \"Workspace owner not found\" };"
+          },
+          {
+            "file": "app/(ee)/api/admin/impersonate/route.ts",
+            "line": 439,
+            "text": "return { error: \"Workspace not found for this Stripe customer ID\" };"
+          },
+          {
+            "file": "app/(ee)/api/admin/impersonate/route.ts",
+            "line": 444,
+            "text": "return { error: \"Workspace owner not found\" };"
+          },
+          {
+            "file": "app/(ee)/api/admin/impersonate/route.ts",
+            "line": 458,
+            "text": "return { error: \"Workspace not found\" };"
+          },
+          {
+            "file": "app/(ee)/api/admin/impersonate/route.ts",
+            "line": 463,
+            "text": "return { error: \"Workspace owner not found\" };"
+          },
+          {
+            "file": "app/app.dub.co/(share)/share/[dashboardId]/action.ts",
+            "line": 15,
+            "text": "return { error: \"Dashboard not found\" };"
+          },
+          {
+            "file": "app/app.dub.co/(share)/share/[dashboardId]/action.ts",
+            "line": 19,
+            "text": "return { error: \"Invalid password\" };"
+          },
+          {
+            "file": "app/password/[linkId]/action.ts",
+            "line": 18,
+            "text": "return { error: \"Link not found\" };"
+          },
+          {
+            "file": "app/password/[linkId]/action.ts",
+            "line": 40,
+            "text": "return { error: \"Don't DDoS me pls 🥺\" };"
+          },
+          {
+            "file": "app/password/[linkId]/action.ts",
+            "line": 44,
+            "text": "return { error: \"Invalid password\" };"
+          },
+          {
+            "file": "lib/api/domains/utils.ts",
+            "line": 10,
+            "text": "return { error: \"Missing domain\", code: \"unprocessable_entity\" };"
+          },
+          {
+            "file": "lib/api/domains/utils.ts",
+            "line": 13,
+            "text": "return { error: \"Invalid domain\", code: \"unprocessable_entity\" };"
+          },
+          {
+            "file": "lib/api/domains/utils.ts",
+            "line": 27,
+            "text": "return { error: \"Domain is already in use.\", code: \"conflict\" };"
+          },
+          {
+            "file": "lib/api/domains/utils.ts",
+            "line": 29,
+            "text": "return { error: null };"
+          },
+          {
+            "file": "ui/support/ticket-upload.tsx",
+            "line": 40,
+            "text": "return { error: \"Failed to get upload URL\" };"
+          },
+          {
+            "file": "ui/support/ticket-upload.tsx",
+            "line": 65,
+            "text": "return { error: \"Upload failed\" };"
+          }
+        ]
+      },
+      "httpClient": {
+        "dominant": "fetch (313)",
+        "dominantCount": 313,
+        "minorityCount": 0,
+        "minorityMatches": []
+      },
+      "validation": {
+        "dominant": "zod (6)",
+        "dominantCount": 6,
+        "minorityCount": 0,
+        "minorityMatches": []
+      }
+    }
+  },
+  {
+    "repo": "leerob/next-saas-starter",
+    "slicePath": "benchmark/repos/next-saas-starter",
+    "totalFilesScanned": 41,
+    "conventions": {
+      "errorHandling": {
+        "dominant": "throw (14)",
+        "dominantCount": 14,
+        "minorityCount": 7,
+        "minorityMatches": [
+          {
+            "file": "app/(login)/actions.ts",
+            "line": 179,
+            "text": "return { error: 'Invalid or expired invitation.', email, password };"
+          },
+          {
+            "file": "app/(login)/actions.ts",
+            "line": 372,
+            "text": "return { error: 'User is not part of a team' };"
+          },
+          {
+            "file": "app/(login)/actions.ts",
+            "line": 406,
+            "text": "return { error: 'User is not part of a team' };"
+          },
+          {
+            "file": "app/(login)/actions.ts",
+            "line": 419,
+            "text": "return { error: 'User is already a member of this team' };"
+          },
+          {
+            "file": "app/(login)/actions.ts",
+            "line": 436,
+            "text": "return { error: 'An invitation has already been sent to this email' };"
+          },
+          {
+            "file": "lib/auth/middleware.ts",
+            "line": 24,
+            "text": "return { error: result.error.errors[0].message };"
+          },
+          {
+            "file": "lib/auth/middleware.ts",
+            "line": 49,
+            "text": "return { error: result.error.errors[0].message };"
+          }
+        ]
+      },
+      "httpClient": {
+        "dominant": "fetch (3)",
+        "dominantCount": 3,
+        "minorityCount": 0,
+        "minorityMatches": []
+      },
+      "validation": {
+        "dominant": "zod (2)",
+        "dominantCount": 2,
+        "minorityCount": 0,
+        "minorityMatches": []
+      }
+    }
+  },
+  {
+    "repo": "steven-tey/precedent",
+    "slicePath": "benchmark/repos/precedent",
+    "totalFilesScanned": 35,
+    "conventions": {
+      "errorHandling": {
+        "dominant": "throw (1)",
+        "dominantCount": 1,
+        "minorityCount": 0,
+        "minorityMatches": []
+      },
+      "httpClient": {
+        "dominant": "fetch (3)",
+        "dominantCount": 3,
+        "minorityCount": 0,
+        "minorityMatches": []
+      },
+      "validation": {
+        "dominant": "zod (0)",
+        "dominantCount": 0,
+        "minorityCount": 0,
+        "minorityMatches": []
+      }
+    }
+  },
+  {
+    "repo": "t3-oss/create-t3-app",
+    "slicePath": "benchmark/repos/create-t3-app/cli/src",
+    "totalFilesScanned": 36,
+    "conventions": {
+      "errorHandling": {
+        "dominant": "throw (1)",
+        "dominantCount": 1,
+        "minorityCount": 0,
+        "minorityMatches": []
+      },
+      "httpClient": {
+        "dominant": "fetch (0)",
+        "dominantCount": 0,
+        "minorityCount": 0,
+        "minorityMatches": []
+      },
+      "validation": {
+        "dominant": "zod (0)",
+        "dominantCount": 0,
+        "minorityCount": 0,
+        "minorityMatches": []
+      }
+    }
+  },
+  {
+    "repo": "calcom/cal.com (packages/trpc)",
+    "slicePath": "benchmark/repos/calcom/packages/trpc",
+    "totalFilesScanned": 428,
+    "conventions": {
+      "errorHandling": {
+        "dominant": "throw (254)",
+        "dominantCount": 254,
+        "minorityCount": 1,
+        "minorityMatches": [
+          {
+            "file": "server/routers/viewer/feedback/_router.ts",
+            "line": 46,
+            "text": "return { success: false };"
+          }
+        ]
+      },
+      "httpClient": {
+        "dominant": "fetch (2)",
+        "dominantCount": 2,
+        "minorityCount": 0,
+        "minorityMatches": []
+      },
+      "validation": {
+        "dominant": "zod (151)",
+        "dominantCount": 151,
+        "minorityCount": 0,
+        "minorityMatches": []
+      }
+    }
+  },
+  {
+    "repo": "calcom/cal.com (packages/features)",
+    "slicePath": "benchmark/repos/calcom/packages/features",
+    "totalFilesScanned": 973,
+    "conventions": {
+      "errorHandling": {
+        "dominant": "throw (323)",
+        "dominantCount": 323,
+        "minorityCount": 3,
+        "minorityMatches": [
+          {
+            "file": "calendars/lib/CalendarManager.ts",
+            "line": 355,
+            "text": "return { success: false, data: [{ start: startDate, end: endDate, source: \"error-placeholder\" }] };"
+          },
+          {
+            "file": "oauth/services/OAuthService.ts",
+            "line": 402,
+            "text": "return { error: \"invalid_request\", reason: \"pkce_missing_parameters_or_invalid_method\" };"
+          },
+          {
+            "file": "oauth/services/OAuthService.ts",
+            "line": 407,
+            "text": "return { error: \"invalid_grant\", reason: \"pkce_verification_failed\" };"
+          }
+        ]
+      },
+      "httpClient": {
+        "dominant": "fetch (26)",
+        "dominantCount": 26,
+        "minorityCount": 0,
+        "minorityMatches": []
+      },
+      "validation": {
+        "dominant": "zod (83)",
+        "dominantCount": 83,
+        "minorityCount": 0,
+        "minorityMatches": []
+      }
+    }
+  }
+]

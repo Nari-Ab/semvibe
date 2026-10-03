@@ -1,0 +1,116 @@
+
+╔══════════════════════════════════════════════════════════╗
+║                 semvibe · semantic scan                  ║
+╚══════════════════════════════════════════════════════════╝
+
+  Scanned:    /Users/sidzuya/.gemini/antigravity-ide/scratch/semvibe/benchmark/repos/dub/apps/web
+  Files:      3610
+  Invariants: 5
+
+  ❌ Found 21 Architectural Violations:
+
+  #1 ui/support/ticket-upload.tsx:30 in uploadToPlain()
+    Observed: error-object | Expected: throw
+    Reason:   AST-only mode: statistical outlier confirmed by syntactic inspection.
+    Fix:      Align code with standard: throw
+
+  #2 ui/partners/rewards/ai-reward-builder.tsx:161 in useAIRewardBuilder()
+    Observed: error-object | Expected: throw
+    Reason:   AST-only mode: statistical outlier confirmed by syntactic inspection.
+    Fix:      Align code with standard: throw
+
+  #3 ui/partners/bounties/use-social-content.ts:11 in useSocialContent()
+    Observed: error-object | Expected: throw
+    Reason:   AST-only mode: statistical outlier confirmed by syntactic inspection.
+    Fix:      Align code with standard: throw
+
+  #4 app/app.dub.co/(dashboard)/[slug]/(ee)/program/campaigns/use-campaigns-count.tsx:13 in useCampaignsCount()
+    Observed: error-object | Expected: throw
+    Reason:   AST-only mode: statistical outlier confirmed by syntactic inspection.
+    Fix:      Align code with standard: throw
+
+  #5 app/app.dub.co/(dashboard)/[slug]/(ee)/program/campaigns/use-campaign.tsx:7 in useCampaign()
+    Observed: error-object | Expected: throw
+    Reason:   AST-only mode: statistical outlier confirmed by syntactic inspection.
+    Fix:      Align code with standard: throw
+
+  #6 lib/api/errors.ts:65 in fromZodError()
+    Observed: error-object | Expected: throw
+    Reason:   AST-only mode: statistical outlier confirmed by syntactic inspection.
+    Fix:      Align code with standard: throw
+
+  #7 lib/api/errors.ts:93 in handleApiError()
+    Observed: error-object | Expected: throw
+    Reason:   AST-only mode: statistical outlier confirmed by syntactic inspection.
+    Fix:      Align code with standard: throw
+
+  #8 lib/api/oauth/actions.ts:7 in validateAuthorizeRequest()
+    Observed: error-object | Expected: throw
+    Reason:   AST-only mode: statistical outlier confirmed by syntactic inspection.
+    Fix:      Align code with standard: throw
+
+  #9 lib/api/links/process-link.ts:28 in processLink()
+    Observed: error-object | Expected: throw
+    Reason:   AST-only mode: statistical outlier confirmed by syntactic inspection.
+    Fix:      Align code with standard: throw
+
+  #10 lib/api/domains/validate-dub-link-subdomain.ts:9 in validateDubLinkSubdomain()
+    Observed: error-object | Expected: throw
+    Reason:   AST-only mode: statistical outlier confirmed by syntactic inspection.
+    Fix:      Align code with standard: throw
+
+  #11 lib/api/domains/utils.ts:6 in validateDomain()
+    Observed: error-object | Expected: throw
+    Reason:   AST-only mode: statistical outlier confirmed by syntactic inspection.
+    Fix:      Align code with standard: throw
+
+  #12 lib/api/links/utils/key-checks.ts:12 in keyChecks()
+    Observed: error-object | Expected: throw
+    Reason:   AST-only mode: statistical outlier confirmed by syntactic inspection.
+    Fix:      Align code with standard: throw
+
+  #13 app/(ee)/api/admin/impersonate/route.ts:113 in parseImpersonateQuery()
+    Observed: error-object | Expected: throw
+    Reason:   AST-only mode: statistical outlier confirmed by syntactic inspection.
+    Fix:      Align code with standard: throw
+
+  #14 app/(ee)/api/admin/impersonate/route.ts:343 in findUser()
+    Observed: error-object | Expected: throw
+    Reason:   AST-only mode: statistical outlier confirmed by syntactic inspection.
+    Fix:      Align code with standard: throw
+
+  #15 app/(ee)/api/cron/streams/update-workspace-links-usage/route.ts:81 in anonymous()
+    Observed: success-boolean | Expected: throw
+    Reason:   AST-only mode: statistical outlier confirmed by syntactic inspection.
+    Fix:      Align code with standard: throw
+
+  #16 app/(ee)/api/cron/streams/update-partner-stats/route.ts:41 in anonymous()
+    Observed: success-boolean | Expected: throw
+    Reason:   AST-only mode: statistical outlier confirmed by syntactic inspection.
+    Fix:      Align code with standard: throw
+
+  #17 app/(ee)/api/cron/streams/update-click-stats/route.ts:154 in anonymous()
+    Observed: success-boolean | Expected: throw
+    Reason:   AST-only mode: statistical outlier confirmed by syntactic inspection.
+    Fix:      Align code with standard: throw
+
+  #18 app/(ee)/api/cron/streams/update-click-stats/route.ts:194 in anonymous()
+    Observed: success-boolean | Expected: throw
+    Reason:   AST-only mode: statistical outlier confirmed by syntactic inspection.
+    Fix:      Align code with standard: throw
+
+  #19 app/(ee)/api/cron/streams/update-click-stats/route.ts:220 in anonymous()
+    Observed: success-boolean | Expected: throw
+    Reason:   AST-only mode: statistical outlier confirmed by syntactic inspection.
+    Fix:      Align code with standard: throw
+
+  #20 app/(ee)/api/cron/streams/update-click-stats/route.ts:243 in anonymous()
+    Observed: success-boolean | Expected: throw
+    Reason:   AST-only mode: statistical outlier confirmed by syntactic inspection.
+    Fix:      Align code with standard: throw
+
+  #21 app/(ee)/api/cron/import/csv/route.ts:136 in mapCsvRowToLink()
+    Observed: success-boolean | Expected: throw
+    Reason:   AST-only mode: statistical outlier confirmed by syntactic inspection.
+    Fix:      Align code with standard: throw
+

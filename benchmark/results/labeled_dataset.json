@@ -1,0 +1,842 @@
+[
+  {
+    "id": "FND-001",
+    "label": "FP-Noise",
+    "reason": "Cognitive complexity 42 in cron handler without a codebase-wide complexity budget or established architectural invariant.",
+    "meta": {
+      "id": "FND-001",
+      "tool": "drift",
+      "repository": "dubinc/dub",
+      "file": "apps/web/app/(ee)/api/cron/campaigns/broadcast/route.ts",
+      "line": 1,
+      "rule": "cognitive_complexity",
+      "originalDesc": "Function 'POST' in apps/web/app/(ee)/api/cron/campaigns/broadcast/route.ts has cognitive complexity 42 (threshold: 15). Complex control flow makes this function hard to understand and maintain."
+    }
+  },
+  {
+    "id": "FND-002",
+    "label": "FP-Intentional",
+    "reason": "React Hook useCampaignsCount returning SWR-like { error } tuple; client-side hook convention in UI differs intentionally from server throw convention.",
+    "meta": {
+      "id": "FND-002",
+      "tool": "semvibe",
+      "repository": "dubinc/dub",
+      "file": "app/app.dub.co/(dashboard)/[slug]/(ee)/program/campaigns/use-campaigns-count.tsx",
+      "line": 13,
+      "rule": "Convention: expected throw, observed error-object",
+      "originalDesc": "Deviation in useCampaignsCount(): uses error-object instead of dominant throw"
+    }
+  },
+  {
+    "id": "FND-003",
+    "label": "FP-Intentional",
+    "reason": "Service method returns boolean success status for batch admin operation rather than throwing; intentional business operation signature.",
+    "meta": {
+      "id": "FND-003",
+      "tool": "semvibe",
+      "repository": "calcom/cal.com",
+      "file": "watchlist/lib/service/AdminWatchlistOperationsService.ts",
+      "line": 157,
+      "rule": "Convention: expected throw, observed success-boolean",
+      "originalDesc": "Deviation in addToWatchlistByEmail(): uses success-boolean instead of dominant throw"
+    }
+  },
+  {
+    "id": "FND-004",
+    "label": "FP-Noise",
+    "reason": "Cognitive complexity 51 in UI form component; generic static metric, not a codebase convention.",
+    "meta": {
+      "id": "FND-004",
+      "tool": "drift",
+      "repository": "dubinc/dub",
+      "file": "apps/web/ui/domains/domain-configuration.tsx",
+      "line": 1,
+      "rule": "cognitive_complexity",
+      "originalDesc": "Function 'DomainConfiguration' in apps/web/ui/domains/domain-configuration.tsx has cognitive complexity 51 (threshold: 15). Complex control flow makes this function hard to understand and maintain."
+    }
+  },
+  {
+    "id": "FND-005",
+    "label": "FP-Intentional",
+    "reason": "React hook useAIRewardBuilder returns form error state for UI rendering, not a backend exception.",
+    "meta": {
+      "id": "FND-005",
+      "tool": "semvibe",
+      "repository": "dubinc/dub",
+      "file": "ui/partners/rewards/ai-reward-builder.tsx",
+      "line": 161,
+      "rule": "Convention: expected throw, observed error-object",
+      "originalDesc": "Deviation in useAIRewardBuilder(): uses error-object instead of dominant throw"
+    }
+  },
+  {
+    "id": "FND-006",
+    "label": "TP",
+    "reason": "conferencing videoClient returns custom result pattern instead of canonical TRPCError/throw error convention in cal.com packages.",
+    "meta": {
+      "id": "FND-006",
+      "tool": "semvibe",
+      "repository": "calcom/cal.com",
+      "file": "conferencing/lib/videoClient.ts",
+      "line": 105,
+      "rule": "Convention: expected throw, observed result-pattern",
+      "originalDesc": "Deviation in updateMeeting(): uses result-pattern instead of dominant throw"
+    }
+  },
+  {
+    "id": "FND-007",
+    "label": "TP",
+    "reason": "fetchSignup returns error object instead of raising canonical AuthError/TRPCError consistent with signup pipeline.",
+    "meta": {
+      "id": "FND-007",
+      "tool": "semvibe",
+      "repository": "calcom/cal.com",
+      "file": "auth/signup/lib/fetchSignup.ts",
+      "line": 28,
+      "rule": "Convention: expected throw, observed error-object",
+      "originalDesc": "Deviation in fetchSignup(): uses error-object instead of dominant throw"
+    }
+  },
+  {
+    "id": "FND-008",
+    "label": "FP-Noise",
+    "reason": "Generic cognitive complexity metric on analytics tracking script.",
+    "meta": {
+      "id": "FND-008",
+      "tool": "drift",
+      "repository": "dubinc/dub",
+      "file": "apps/web/lib/tinybird/record-click.ts",
+      "line": 1,
+      "rule": "cognitive_complexity",
+      "originalDesc": "Function 'recordClick' in apps/web/lib/tinybird/record-click.ts has cognitive complexity 56 (threshold: 15). Complex control flow makes this function hard to understand and maintain."
+    }
+  },
+  {
+    "id": "FND-009",
+    "label": "TP",
+    "reason": "validateDomain in lib/api/domains returns { error } object, deviating from 95%+ server API throw convention in Dub.",
+    "meta": {
+      "id": "FND-009",
+      "tool": "semvibe",
+      "repository": "dubinc/dub",
+      "file": "lib/api/domains/utils.ts",
+      "line": 6,
+      "rule": "Convention: expected throw, observed error-object",
+      "originalDesc": "Deviation in validateDomain(): uses error-object instead of dominant throw"
+    }
+  },
+  {
+    "id": "FND-010",
+    "label": "FP-Noise",
+    "reason": "Missing docstring / test check on small 32-LOC UI component; style nit, not architectural drift.",
+    "meta": {
+      "id": "FND-010",
+      "tool": "drift",
+      "repository": "dubinc/dub",
+      "file": "apps/web/ui/support/source-citations.tsx",
+      "line": 1,
+      "rule": "explainability_deficit",
+      "originalDesc": "Complexity: 10, LOC: 32. No docstring. No corresponding test found."
+    }
+  },
+  {
+    "id": "FND-011",
+    "label": "FP-Noise",
+    "reason": "Empty/unknown location signal from analyzer with no actionable code reference.",
+    "meta": {
+      "id": "FND-011",
+      "tool": "drift",
+      "repository": "calcom/cal.com",
+      "file": "unknown",
+      "line": 1,
+      "rule": "drift-pattern",
+      "originalDesc": "Architectural drift signal"
+    }
+  },
+  {
+    "id": "FND-012",
+    "label": "FP-Intentional",
+    "reason": "Webhook delivery service returning success-boolean for event delivery retry loop.",
+    "meta": {
+      "id": "FND-012",
+      "tool": "semvibe",
+      "repository": "calcom/cal.com",
+      "file": "webhooks/lib/service/WebhookService.ts",
+      "line": 270,
+      "rule": "Convention: expected throw, observed success-boolean",
+      "originalDesc": "Deviation in anonymous(): uses success-boolean instead of dominant throw"
+    }
+  },
+  {
+    "id": "FND-013",
+    "label": "TP",
+    "reason": "EventManager isCalendarResult uses custom result pattern deviating from canonical event processing contract.",
+    "meta": {
+      "id": "FND-013",
+      "tool": "semvibe",
+      "repository": "calcom/cal.com",
+      "file": "bookings/lib/EventManager.ts",
+      "line": 377,
+      "rule": "Convention: expected throw, observed result-pattern",
+      "originalDesc": "Deviation in isCalendarResult(): uses result-pattern instead of dominant throw"
+    }
+  },
+  {
+    "id": "FND-014",
+    "label": "TP",
+    "reason": "13/16 dead exports in qr-code-design-fields; genuine architectural dead code bloat in component library.",
+    "meta": {
+      "id": "FND-014",
+      "tool": "drift",
+      "repository": "dubinc/dub",
+      "file": "apps/web/ui/modals/qr-code-design-fields.tsx",
+      "line": 1,
+      "rule": "dead_code_accumulation",
+      "originalDesc": "apps/web/ui/modals/qr-code-design-fields.tsx exports 13/16 public symbols that are never imported elsewhere: ColorSection, SquareDotIcon, RoundedDotIcon, ExtraRoundedDotIcon, MarkerCenterSquareIcon, MarkerCenterCircleIcon, MarkerBorderSquareIcon, MarkerBorderRoundedIcon, MarkerBorderCircleIcon, DownloadPopover…. Dead code increases maintenance cost and confuses contributors."
+    }
+  },
+  {
+    "id": "FND-015",
+    "label": "FP-Noise",
+    "reason": "Linter nit: missing docstring / return type on 19 LOC UI sheet component.",
+    "meta": {
+      "id": "FND-015",
+      "tool": "drift",
+      "repository": "dubinc/dub",
+      "file": "apps/web/ui/partners/rewards/add-edit-reward-sheet.tsx",
+      "line": 1,
+      "rule": "explainability_deficit",
+      "originalDesc": "Complexity: 7, LOC: 19. No docstring. No corresponding test found. No return type annotation."
+    }
+  },
+  {
+    "id": "FND-016",
+    "label": "FP-Noise",
+    "reason": "Linter nit: missing docstring / test on form submission hook.",
+    "meta": {
+      "id": "FND-016",
+      "tool": "drift",
+      "repository": "dubinc/dub",
+      "file": "apps/web/ui/links/link-builder/use-link-builder-submit.tsx",
+      "line": 1,
+      "rule": "explainability_deficit",
+      "originalDesc": "Complexity: 31, LOC: 164. No docstring. No corresponding test found. No return type annotation."
+    }
+  },
+  {
+    "id": "FND-017",
+    "label": "FP-Noise",
+    "reason": "Missing docstring / test on 76 LOC review sheet.",
+    "meta": {
+      "id": "FND-017",
+      "tool": "drift",
+      "repository": "dubinc/dub",
+      "file": "apps/web/ui/partners/program-application-review-sheet.tsx",
+      "line": 1,
+      "rule": "explainability_deficit",
+      "originalDesc": "Complexity: 6, LOC: 76. No docstring. No corresponding test found. No return type annotation."
+    }
+  },
+  {
+    "id": "FND-018",
+    "label": "FP-Intentional",
+    "reason": "Client-side SWR/query hook returning error state for bounty card UI.",
+    "meta": {
+      "id": "FND-018",
+      "tool": "semvibe",
+      "repository": "dubinc/dub",
+      "file": "ui/partners/bounties/use-social-content.ts",
+      "line": 11,
+      "rule": "Convention: expected throw, observed error-object",
+      "originalDesc": "Deviation in useSocialContent(): uses error-object instead of dominant throw"
+    }
+  },
+  {
+    "id": "FND-019",
+    "label": "FP-Noise",
+    "reason": "Cognitive complexity 27 in form onSubmit handler.",
+    "meta": {
+      "id": "FND-019",
+      "tool": "drift",
+      "repository": "dubinc/dub",
+      "file": "apps/web/app/app.dub.co/(dashboard)/[slug]/(ee)/program/commissions/create-commission-sheet.tsx",
+      "line": 1,
+      "rule": "cognitive_complexity",
+      "originalDesc": "Function 'onSubmit' in apps/web/app/app.dub.co/(dashboard)/[slug]/(ee)/program/commissions/create-commission-sheet.tsx has cognitive complexity 27 (threshold: 15). Complex control flow makes this function hard to understand and maintain."
+    }
+  },
+  {
+    "id": "FND-020",
+    "label": "FP-Noise",
+    "reason": "Cognitive complexity 40 in fraud scoring logic.",
+    "meta": {
+      "id": "FND-020",
+      "tool": "drift",
+      "repository": "dubinc/dub",
+      "file": "apps/web/lib/api/fraud/detect-record-fraud-application.ts",
+      "line": 1,
+      "rule": "cognitive_complexity",
+      "originalDesc": "Function 'detectAndRecordFraudApplication' in apps/web/lib/api/fraud/detect-record-fraud-application.ts has cognitive complexity 40 (threshold: 15). Complex control flow makes this function hard to understand and maintain."
+    }
+  },
+  {
+    "id": "FND-021",
+    "label": "FP-Noise",
+    "reason": "Cognitive complexity 78 in admin dashboard page.",
+    "meta": {
+      "id": "FND-021",
+      "tool": "drift",
+      "repository": "dubinc/dub",
+      "file": "apps/web/app/(ee)/admin.dub.co/(dashboard)/partners/network/page.tsx",
+      "line": 1,
+      "rule": "cognitive_complexity",
+      "originalDesc": "Function 'NetworkApplicationsPage' in apps/web/app/(ee)/admin.dub.co/(dashboard)/partners/network/page.tsx has cognitive complexity 78 (threshold: 15). Complex control flow makes this function hard to understand and maintain."
+    }
+  },
+  {
+    "id": "FND-022",
+    "label": "TP",
+    "reason": "parseImpersonateQuery in admin API route returns { error } object, violating API route throw error convention.",
+    "meta": {
+      "id": "FND-022",
+      "tool": "semvibe",
+      "repository": "dubinc/dub",
+      "file": "app/(ee)/api/admin/impersonate/route.ts",
+      "line": 113,
+      "rule": "Convention: expected throw, observed error-object",
+      "originalDesc": "Deviation in parseImpersonateQuery(): uses error-object instead of dominant throw"
+    }
+  },
+  {
+    "id": "FND-023",
+    "label": "FP-Intentional",
+    "reason": "Client UI hook useCampaign returning query error status for banner.",
+    "meta": {
+      "id": "FND-023",
+      "tool": "semvibe",
+      "repository": "dubinc/dub",
+      "file": "app/app.dub.co/(dashboard)/[slug]/(ee)/program/campaigns/use-campaign.tsx",
+      "line": 7,
+      "rule": "Convention: expected throw, observed error-object",
+      "originalDesc": "Deviation in useCampaign(): uses error-object instead of dominant throw"
+    }
+  },
+  {
+    "id": "FND-024",
+    "label": "FP-Noise",
+    "reason": "Empty/unknown analyzer signal.",
+    "meta": {
+      "id": "FND-024",
+      "tool": "drift",
+      "repository": "calcom/cal.com",
+      "file": "unknown",
+      "line": 1,
+      "rule": "drift-pattern",
+      "originalDesc": "Architectural drift signal"
+    }
+  },
+  {
+    "id": "FND-025",
+    "label": "TP",
+    "reason": "keyChecks in lib/api/links returns { error } object instead of throw new AppError/ApiError.",
+    "meta": {
+      "id": "FND-025",
+      "tool": "semvibe",
+      "repository": "dubinc/dub",
+      "file": "lib/api/links/utils/key-checks.ts",
+      "line": 12,
+      "rule": "Convention: expected throw, observed error-object",
+      "originalDesc": "Deviation in keyChecks(): uses error-object instead of dominant throw"
+    }
+  },
+  {
+    "id": "FND-026",
+    "label": "FP-Intentional",
+    "reason": "Iterator callback returning boolean status in bulk event sync.",
+    "meta": {
+      "id": "FND-026",
+      "tool": "semvibe",
+      "repository": "calcom/cal.com",
+      "file": "bookings/lib/EventManager.ts",
+      "line": 1192,
+      "rule": "Convention: expected throw, observed success-boolean",
+      "originalDesc": "Deviation in anonymous(): uses success-boolean instead of dominant throw"
+    }
+  },
+  {
+    "id": "FND-027",
+    "label": "TP",
+    "reason": "Identifies 4 disparate error handling variants in api/utils module (withPrismaRetry, isNonEmptyJson).",
+    "meta": {
+      "id": "FND-027",
+      "tool": "drift",
+      "repository": "dubinc/dub",
+      "file": "apps/web/lib/api/utils",
+      "line": 1,
+      "rule": "pattern_fragmentation",
+      "originalDesc": "4 error_handling variants in apps/web/lib/api/utils/ (1/4 use canonical pattern).\n  - Framework-facing module detected; severity was context-calibrated for endpoint/orchestration diversity.\n  - apps/web/lib/api/utils/format-money-cents-for-export.ts:21 (formatMoneyCentsForExport)\n  - apps/web/lib/api/utils/is-non-empty-json.ts:6 (isNonEmptyJson)\n  - apps/web/lib/api/utils/with-prisma-retry.ts:34 (withPrismaRetry)"
+    }
+  },
+  {
+    "id": "FND-028",
+    "label": "FP-Intentional",
+    "reason": "Service method returning boolean success flag for watchlist entry creation.",
+    "meta": {
+      "id": "FND-028",
+      "tool": "semvibe",
+      "repository": "calcom/cal.com",
+      "file": "watchlist/lib/service/WatchlistOperationsService.ts",
+      "line": 67,
+      "rule": "Convention: expected throw, observed success-boolean",
+      "originalDesc": "Deviation in createWatchlistEntry(): uses success-boolean instead of dominant throw"
+    }
+  },
+  {
+    "id": "FND-029",
+    "label": "FP-Noise",
+    "reason": "Empty/unknown analyzer signal.",
+    "meta": {
+      "id": "FND-029",
+      "tool": "drift",
+      "repository": "calcom/cal.com",
+      "file": "unknown",
+      "line": 1,
+      "rule": "drift-pattern",
+      "originalDesc": "Architectural drift signal"
+    }
+  },
+  {
+    "id": "FND-030",
+    "label": "FP-Intentional",
+    "reason": "Bulk event sync iterator returning boolean status.",
+    "meta": {
+      "id": "FND-030",
+      "tool": "semvibe",
+      "repository": "calcom/cal.com",
+      "file": "bookings/lib/EventManager.ts",
+      "line": 1219,
+      "rule": "Convention: expected throw, observed success-boolean",
+      "originalDesc": "Deviation in anonymous(): uses success-boolean instead of dominant throw"
+    }
+  },
+  {
+    "id": "FND-031",
+    "label": "FP-Noise",
+    "reason": "Empty/unknown analyzer signal.",
+    "meta": {
+      "id": "FND-031",
+      "tool": "drift",
+      "repository": "calcom/cal.com",
+      "file": "unknown",
+      "line": 1,
+      "rule": "drift-pattern",
+      "originalDesc": "Architectural drift signal"
+    }
+  },
+  {
+    "id": "FND-032",
+    "label": "FP-Noise",
+    "reason": "Missing docstring / test on layout wrapper component.",
+    "meta": {
+      "id": "FND-032",
+      "tool": "drift",
+      "repository": "dubinc/dub",
+      "file": "apps/web/ui/layout/page-content/page-content-with-side-panel.tsx",
+      "line": 1,
+      "rule": "explainability_deficit",
+      "originalDesc": "Complexity: 7, LOC: 98. No docstring. No corresponding test found. No return type annotation."
+    }
+  },
+  {
+    "id": "FND-033",
+    "label": "FP-Noise",
+    "reason": "Empty/unknown analyzer signal.",
+    "meta": {
+      "id": "FND-033",
+      "tool": "drift",
+      "repository": "calcom/cal.com",
+      "file": "unknown",
+      "line": 1,
+      "rule": "drift-pattern",
+      "originalDesc": "Architectural drift signal"
+    }
+  },
+  {
+    "id": "FND-034",
+    "label": "FP-Noise",
+    "reason": "Missing docstring / test on verification component.",
+    "meta": {
+      "id": "FND-034",
+      "tool": "drift",
+      "repository": "dubinc/dub",
+      "file": "apps/web/app/(ee)/admin.dub.co/(dashboard)/partners/network/identity-verification.tsx",
+      "line": 1,
+      "rule": "explainability_deficit",
+      "originalDesc": "Complexity: 17, LOC: 180. No docstring. No corresponding test found. No return type annotation."
+    }
+  },
+  {
+    "id": "FND-035",
+    "label": "FP-Noise",
+    "reason": "Empty/unknown analyzer signal.",
+    "meta": {
+      "id": "FND-035",
+      "tool": "drift",
+      "repository": "calcom/cal.com",
+      "file": "unknown",
+      "line": 1,
+      "rule": "drift-pattern",
+      "originalDesc": "Architectural drift signal"
+    }
+  },
+  {
+    "id": "FND-036",
+    "label": "FP-Intentional",
+    "reason": "Stream batch processing callback returning success status boolean for stream ack.",
+    "meta": {
+      "id": "FND-036",
+      "tool": "semvibe",
+      "repository": "dubinc/dub",
+      "file": "app/(ee)/api/cron/streams/update-partner-stats/route.ts",
+      "line": 41,
+      "rule": "Convention: expected throw, observed success-boolean",
+      "originalDesc": "Deviation in anonymous(): uses success-boolean instead of dominant throw"
+    }
+  },
+  {
+    "id": "FND-037",
+    "label": "FP-Intentional",
+    "reason": "Stream consumer callback returning boolean for Redis stream acknowledgment.",
+    "meta": {
+      "id": "FND-037",
+      "tool": "semvibe",
+      "repository": "dubinc/dub",
+      "file": "app/(ee)/api/cron/streams/update-click-stats/route.ts",
+      "line": 154,
+      "rule": "Convention: expected throw, observed success-boolean",
+      "originalDesc": "Deviation in anonymous(): uses success-boolean instead of dominant throw"
+    }
+  },
+  {
+    "id": "FND-038",
+    "label": "FP-Noise",
+    "reason": "Heuristic semantic isolation metric on SVG icon component (isolation ratio=1.00).",
+    "meta": {
+      "id": "FND-038",
+      "tool": "drift",
+      "repository": "dubinc/dub",
+      "file": "apps/web/ui/layout/sidebar/icons/grid.tsx",
+      "line": 1,
+      "rule": "cohesion_deficit",
+      "originalDesc": "4/4 semantic units are isolated (mean best similarity=0.00, isolation ratio=1.00)."
+    }
+  },
+  {
+    "id": "FND-039",
+    "label": "FP-Noise",
+    "reason": "Missing docstring on referrals resource component.",
+    "meta": {
+      "id": "FND-039",
+      "tool": "drift",
+      "repository": "dubinc/dub",
+      "file": "apps/web/app/(ee)/app.dub.co/embed/referrals/resources.tsx",
+      "line": 1,
+      "rule": "explainability_deficit",
+      "originalDesc": "Complexity: 11, LOC: 101. No docstring. No corresponding test found. No return type annotation."
+    }
+  },
+  {
+    "id": "FND-040",
+    "label": "FP-Intentional",
+    "reason": "Redis stream consumer returning boolean ack.",
+    "meta": {
+      "id": "FND-040",
+      "tool": "semvibe",
+      "repository": "dubinc/dub",
+      "file": "app/(ee)/api/cron/streams/update-click-stats/route.ts",
+      "line": 243,
+      "rule": "Convention: expected throw, observed success-boolean",
+      "originalDesc": "Deviation in anonymous(): uses success-boolean instead of dominant throw"
+    }
+  },
+  {
+    "id": "FND-041",
+    "label": "TP",
+    "reason": "findUser in admin impersonate route returns { error } object instead of throwing ApiError.",
+    "meta": {
+      "id": "FND-041",
+      "tool": "semvibe",
+      "repository": "dubinc/dub",
+      "file": "app/(ee)/api/admin/impersonate/route.ts",
+      "line": 343,
+      "rule": "Convention: expected throw, observed error-object",
+      "originalDesc": "Deviation in findUser(): uses error-object instead of dominant throw"
+    }
+  },
+  {
+    "id": "FND-042",
+    "label": "FP-Noise",
+    "reason": "Missing docstring on HubSpot integration lead tracker.",
+    "meta": {
+      "id": "FND-042",
+      "tool": "drift",
+      "repository": "dubinc/dub",
+      "file": "apps/web/lib/integrations/hubspot/track-lead.ts",
+      "line": 1,
+      "rule": "explainability_deficit",
+      "originalDesc": "Complexity: 7, LOC: 49. No docstring. No corresponding test found. No return type annotation."
+    }
+  },
+  {
+    "id": "FND-043",
+    "label": "FP-Noise",
+    "reason": "Empty/unknown analyzer signal.",
+    "meta": {
+      "id": "FND-043",
+      "tool": "drift",
+      "repository": "calcom/cal.com",
+      "file": "unknown",
+      "line": 1,
+      "rule": "drift-pattern",
+      "originalDesc": "Architectural drift signal"
+    }
+  },
+  {
+    "id": "FND-044",
+    "label": "FP-Noise",
+    "reason": "Missing docstring on messages page component.",
+    "meta": {
+      "id": "FND-044",
+      "tool": "drift",
+      "repository": "dubinc/dub",
+      "file": "apps/web/app/(ee)/partners.dub.co/(dashboard)/messages/[programSlug]/page.tsx",
+      "line": 1,
+      "rule": "explainability_deficit",
+      "originalDesc": "Complexity: 12, LOC: 177. No docstring. No corresponding test found. No return type annotation."
+    }
+  },
+  {
+    "id": "FND-045",
+    "label": "FP-Intentional",
+    "reason": "OAuth PKCE verification explicitly returning OAuth standard error code per RFC 7636.",
+    "meta": {
+      "id": "FND-045",
+      "tool": "semvibe",
+      "repository": "calcom/cal.com",
+      "file": "oauth/services/OAuthService.ts",
+      "line": 385,
+      "rule": "Convention: expected throw, observed error-object",
+      "originalDesc": "Deviation in verifyPKCE(): uses error-object instead of dominant throw"
+    }
+  },
+  {
+    "id": "FND-046",
+    "label": "FP-Noise",
+    "reason": "Missing docstring on revenue page component.",
+    "meta": {
+      "id": "FND-046",
+      "tool": "drift",
+      "repository": "dubinc/dub",
+      "file": "apps/web/app/(ee)/admin.dub.co/(dashboard)/revenue/page.tsx",
+      "line": 1,
+      "rule": "explainability_deficit",
+      "originalDesc": "Complexity: 10, LOC: 20. No docstring. No corresponding test found. No return type annotation."
+    }
+  },
+  {
+    "id": "FND-047",
+    "label": "FP-Noise",
+    "reason": "Cognitive complexity 20 on form component.",
+    "meta": {
+      "id": "FND-047",
+      "tool": "drift",
+      "repository": "dubinc/dub",
+      "file": "apps/web/ui/partners/groups/design/application-form/program-application-form.tsx",
+      "line": 1,
+      "rule": "cognitive_complexity",
+      "originalDesc": "Function 'ProgramApplicationForm' in apps/web/ui/partners/groups/design/application-form/program-application-form.tsx has cognitive complexity 20 (threshold: 15). Complex control flow makes this function hard to understand and maintain."
+    }
+  },
+  {
+    "id": "FND-048",
+    "label": "FP-Noise",
+    "reason": "Cognitive complexity 26 on campaign condition logic.",
+    "meta": {
+      "id": "FND-048",
+      "tool": "drift",
+      "repository": "dubinc/dub",
+      "file": "apps/web/app/app.dub.co/(dashboard)/[slug]/(ee)/program/campaigns/[campaignId]/transactional-campaign-logic.tsx",
+      "line": 1,
+      "rule": "cognitive_complexity",
+      "originalDesc": "Function 'ConditionRow' in apps/web/app/app.dub.co/(dashboard)/[slug]/(ee)/program/campaigns/[campaignId]/transactional-campaign-logic.tsx has cognitive complexity 26 (threshold: 15). Complex control flow makes this function hard to understand and maintain."
+    }
+  },
+  {
+    "id": "FND-049",
+    "label": "FP-Noise",
+    "reason": "Cognitive complexity 16 on accordion block modal.",
+    "meta": {
+      "id": "FND-049",
+      "tool": "drift",
+      "repository": "dubinc/dub",
+      "file": "apps/web/ui/partners/groups/design/lander/modals/accordion-block-modal.tsx",
+      "line": 1,
+      "rule": "cognitive_complexity",
+      "originalDesc": "Function 'AccordionBlockModalInner' in apps/web/ui/partners/groups/design/lander/modals/accordion-block-modal.tsx has cognitive complexity 16 (threshold: 15). Complex control flow makes this function hard to understand and maintain."
+    }
+  },
+  {
+    "id": "FND-050",
+    "label": "TP",
+    "reason": "CalendarManager anonymous callback returns error object instead of throwing CalendarServiceError.",
+    "meta": {
+      "id": "FND-050",
+      "tool": "semvibe",
+      "repository": "calcom/cal.com",
+      "file": "calendars/lib/CalendarManager.ts",
+      "line": 130,
+      "rule": "Convention: expected throw, observed error-object",
+      "originalDesc": "Deviation in anonymous(): uses error-object instead of dominant throw"
+    }
+  },
+  {
+    "id": "FND-051",
+    "label": "FP-Noise",
+    "reason": "Cognitive complexity 63 on image upload field.",
+    "meta": {
+      "id": "FND-051",
+      "tool": "drift",
+      "repository": "dubinc/dub",
+      "file": "apps/web/ui/partners/groups/design/application-form/fields/image-upload-field.tsx",
+      "line": 1,
+      "rule": "cognitive_complexity",
+      "originalDesc": "Function 'ImageUploadFieldContent' in apps/web/ui/partners/groups/design/application-form/fields/image-upload-field.tsx has cognitive complexity 63 (threshold: 15). Complex control flow makes this function hard to understand and maintain."
+    }
+  },
+  {
+    "id": "FND-052",
+    "label": "FP-Noise",
+    "reason": "Cognitive complexity 17 on referral commission function.",
+    "meta": {
+      "id": "FND-052",
+      "tool": "drift",
+      "repository": "dubinc/dub",
+      "file": "apps/web/lib/partner-referrals/create-network-referral-commission.ts",
+      "line": 1,
+      "rule": "cognitive_complexity",
+      "originalDesc": "Function 'createNetworkReferralCommission' in apps/web/lib/partner-referrals/create-network-referral-commission.ts has cognitive complexity 17 (threshold: 15). Complex control flow makes this function hard to understand and maintain."
+    }
+  },
+  {
+    "id": "FND-053",
+    "label": "FP-Intentional",
+    "reason": "getBusyCalendarTimes returns boolean success flag in scheduling query.",
+    "meta": {
+      "id": "FND-053",
+      "tool": "semvibe",
+      "repository": "calcom/cal.com",
+      "file": "calendars/lib/CalendarManager.ts",
+      "line": 296,
+      "rule": "Convention: expected throw, observed success-boolean",
+      "originalDesc": "Deviation in getBusyCalendarTimes(): uses success-boolean instead of dominant throw"
+    }
+  },
+  {
+    "id": "FND-054",
+    "label": "FP-Noise",
+    "reason": "Empty/unknown analyzer signal.",
+    "meta": {
+      "id": "FND-054",
+      "tool": "drift",
+      "repository": "t3-oss/create-t3-app",
+      "file": "unknown",
+      "line": 1,
+      "rule": "drift-pattern",
+      "originalDesc": "Architectural drift signal"
+    }
+  },
+  {
+    "id": "FND-055",
+    "label": "TP",
+    "reason": "uploadToPlain in ticket-upload.tsx returns { error } object instead of throwing.",
+    "meta": {
+      "id": "FND-055",
+      "tool": "semvibe",
+      "repository": "dubinc/dub",
+      "file": "ui/support/ticket-upload.tsx",
+      "line": 30,
+      "rule": "Convention: expected throw, observed error-object",
+      "originalDesc": "Deviation in uploadToPlain(): uses error-object instead of dominant throw"
+    }
+  },
+  {
+    "id": "FND-056",
+    "label": "FP-Noise",
+    "reason": "Cognitive complexity 16 in referral route.",
+    "meta": {
+      "id": "FND-056",
+      "tool": "drift",
+      "repository": "dubinc/dub",
+      "file": "apps/web/app/(ee)/api/partner-profile/programs/[programId]/referrals/route.ts",
+      "line": 1,
+      "rule": "cognitive_complexity",
+      "originalDesc": "Function '<anonymous>' in apps/web/app/(ee)/api/partner-profile/programs/[programId]/referrals/route.ts has cognitive complexity 16 (threshold: 15). Complex control flow makes this function hard to understand and maintain."
+    }
+  },
+  {
+    "id": "FND-057",
+    "label": "FP-Intentional",
+    "reason": "Admin watchlist bulk dismissal returns boolean success flag.",
+    "meta": {
+      "id": "FND-057",
+      "tool": "semvibe",
+      "repository": "calcom/cal.com",
+      "file": "watchlist/lib/service/AdminWatchlistOperationsService.ts",
+      "line": 228,
+      "rule": "Convention: expected throw, observed success-boolean",
+      "originalDesc": "Deviation in bulkDismissReportsByEmail(): uses success-boolean instead of dominant throw"
+    }
+  },
+  {
+    "id": "FND-058",
+    "label": "FP-Noise",
+    "reason": "Empty/unknown analyzer signal.",
+    "meta": {
+      "id": "FND-058",
+      "tool": "drift",
+      "repository": "calcom/cal.com",
+      "file": "unknown",
+      "line": 1,
+      "rule": "drift-pattern",
+      "originalDesc": "Architectural drift signal"
+    }
+  },
+  {
+    "id": "FND-059",
+    "label": "FP-Intentional",
+    "reason": "Watchlist deletion service method returns boolean status.",
+    "meta": {
+      "id": "FND-059",
+      "tool": "semvibe",
+      "repository": "calcom/cal.com",
+      "file": "watchlist/lib/service/WatchlistOperationsService.ts",
+      "line": 88,
+      "rule": "Convention: expected throw, observed success-boolean",
+      "originalDesc": "Deviation in deleteWatchlistEntry(): uses success-boolean instead of dominant throw"
+    }
+  },
+  {
+    "id": "FND-060",
+    "label": "TP",
+    "reason": "High fan-out coupling hub (21 imports vs 15 threshold) in partner-info-cards, structural coupling defect.",
+    "meta": {
+      "id": "FND-060",
+      "tool": "drift",
+      "repository": "dubinc/dub",
+      "file": "apps/web/ui/partners/partner-info-cards.tsx",
+      "line": 1,
+      "rule": "fan_out_explosion",
+      "originalDesc": "apps/web/ui/partners/partner-info-cards.tsx imports 21 unique modules (threshold: 15). High fan-out indicates a coupling hub that is fragile to upstream changes."
+    }
+  }
+]

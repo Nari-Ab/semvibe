@@ -1,0 +1,126 @@
+- Scanning /Users/sidzuya/.gemini/antigravity-ide/scratch/semvibe/benchmark/repos/calcom/packages/trpc for architectural drift...
+✔ Semantic scan complete.
+
+╔══════════════════════════════════════════════════════════╗
+║                 semvibe · semantic scan                  ║
+╚══════════════════════════════════════════════════════════╝
+
+  Scanned:    /Users/sidzuya/.gemini/antigravity-ide/scratch/semvibe/benchmark/repos/calcom/packages/trpc
+  Files:      398
+  Invariants: 1
+
+  ✅ No architectural inconsistencies detected! Codebase is aligned.
+
+- Scanning /Users/sidzuya/.gemini/antigravity-ide/scratch/semvibe/benchmark/repos/calcom/packages/features for architectural drift...
+✔ Semantic scan complete.
+
+╔══════════════════════════════════════════════════════════╗
+║                 semvibe · semantic scan                  ║
+╚══════════════════════════════════════════════════════════╝
+
+  Scanned:    /Users/sidzuya/.gemini/antigravity-ide/scratch/semvibe/benchmark/repos/calcom/packages/features
+  Files:      782
+  Invariants: 6
+
+  ❌ Found 20 Architectural Violations:
+
+  #1 conferencing/lib/videoClient.ts:105 in updateMeeting()
+    Observed: result-pattern | Expected: throw
+    Reason:   AST-only mode: statistical outlier confirmed by syntactic inspection.
+    Fix:      Align code with standard: throw
+
+  #2 calendars/lib/CalendarManager.ts:130 in anonymous()
+    Observed: error-object | Expected: throw
+    Reason:   AST-only mode: statistical outlier confirmed by syntactic inspection.
+    Fix:      Align code with standard: throw
+
+  #3 calendars/lib/CalendarManager.ts:296 in getBusyCalendarTimes()
+    Observed: success-boolean | Expected: throw
+    Reason:   AST-only mode: statistical outlier confirmed by syntactic inspection.
+    Fix:      Align code with standard: throw
+
+  #4 calendars/lib/CalendarManager.ts:360 in createEvent()
+    Observed: result-pattern | Expected: throw
+    Reason:   AST-only mode: statistical outlier confirmed by syntactic inspection.
+    Fix:      Align code with standard: throw
+
+  #5 calendars/lib/CalendarManager.ts:453 in updateEvent()
+    Observed: result-pattern | Expected: throw
+    Reason:   AST-only mode: statistical outlier confirmed by syntactic inspection.
+    Fix:      Align code with standard: throw
+
+  #6 bookings/lib/EventManager.ts:377 in isCalendarResult()
+    Observed: result-pattern | Expected: throw
+    Reason:   AST-only mode: statistical outlier confirmed by syntactic inspection.
+    Fix:      Align code with standard: throw
+
+  #7 bookings/lib/EventManager.ts:1100 in updateAllCalendarEvents()
+    Observed: result-pattern | Expected: throw
+    Reason:   AST-only mode: statistical outlier confirmed by syntactic inspection.
+    Fix:      Align code with standard: throw
+
+  #8 bookings/lib/EventManager.ts:1192 in anonymous()
+    Observed: success-boolean | Expected: throw
+    Reason:   AST-only mode: statistical outlier confirmed by syntactic inspection.
+    Fix:      Align code with standard: throw
+
+  #9 bookings/lib/EventManager.ts:1219 in anonymous()
+    Observed: success-boolean | Expected: throw
+    Reason:   AST-only mode: statistical outlier confirmed by syntactic inspection.
+    Fix:      Align code with standard: throw
+
+  #10 watchlist/lib/service/WatchlistOperationsService.ts:67 in createWatchlistEntry()
+    Observed: success-boolean | Expected: throw
+    Reason:   AST-only mode: statistical outlier confirmed by syntactic inspection.
+    Fix:      Align code with standard: throw
+
+  #11 watchlist/lib/service/WatchlistOperationsService.ts:88 in deleteWatchlistEntry()
+    Observed: success-boolean | Expected: throw
+    Reason:   AST-only mode: statistical outlier confirmed by syntactic inspection.
+    Fix:      Align code with standard: throw
+
+  #12 watchlist/lib/service/OrganizationWatchlistOperationsService.ts:73 in addToWatchlistByEmail()
+    Observed: success-boolean | Expected: throw
+    Reason:   AST-only mode: statistical outlier confirmed by syntactic inspection.
+    Fix:      Align code with standard: throw
+
+  #13 watchlist/lib/service/AdminWatchlistOperationsService.ts:157 in addToWatchlistByEmail()
+    Observed: success-boolean | Expected: throw
+    Reason:   AST-only mode: statistical outlier confirmed by syntactic inspection.
+    Fix:      Align code with standard: throw
+
+  #14 watchlist/lib/service/AdminWatchlistOperationsService.ts:228 in bulkDismissReportsByEmail()
+    Observed: success-boolean | Expected: throw
+    Reason:   AST-only mode: statistical outlier confirmed by syntactic inspection.
+    Fix:      Align code with standard: throw
+
+  #15 webhooks/lib/service/WebhookService.ts:270 in anonymous()
+    Observed: success-boolean | Expected: throw
+    Reason:   AST-only mode: statistical outlier confirmed by syntactic inspection.
+    Fix:      Align code with standard: throw
+
+  #16 auth/signup/lib/fetchSignup.ts:28 in fetchSignup()
+    Observed: error-object | Expected: throw
+    Reason:   AST-only mode: statistical outlier confirmed by syntactic inspection.
+    Fix:      Align code with standard: throw
+
+  #17 oauth/services/OAuthService.ts:234 in mapErrorToOAuthError()
+    Observed: error-object | Expected: throw
+    Reason:   AST-only mode: statistical outlier confirmed by syntactic inspection.
+    Fix:      Align code with standard: throw
+
+  #18 oauth/services/OAuthService.ts:385 in verifyPKCE()
+    Observed: error-object | Expected: throw
+    Reason:   AST-only mode: statistical outlier confirmed by syntactic inspection.
+    Fix:      Align code with standard: throw
+
+  #19 api-keys-legacy/api-keys/services/ApiKeyService.ts:26 in verifyKeyByHashedKey()
+    Observed: error-object | Expected: throw
+    Reason:   AST-only mode: statistical outlier confirmed by syntactic inspection.
+    Fix:      Align code with standard: throw
+
+  #20 auth/signup/utils/prefillAvatar.ts:1
+    Observed: node-fetch | Expected: native-fetch
+    Reason:   AST-only mode: statistical outlier confirmed by syntactic inspection.
+    Fix:      Align code with standard: native-fetch
+

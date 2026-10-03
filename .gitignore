@@ -5,4 +5,7 @@ dist
 .env
 .drift-cache
 benchmark/.drift_venv
+benchmark/repos/
+benchmark/baseline-repo/
+benchmark/mutations-runs/
 

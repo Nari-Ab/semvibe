@@ -1,0 +1,224 @@
+{
+  "timestamp": "2026-10-03T18:51:24.542Z",
+  "totalMutations": 20,
+  "detectedCount": 11,
+  "recallPercent": 55.00000000000001,
+  "passed": false,
+  "mutations": [
+    {
+      "id": 1,
+      "category": "error-handling",
+      "description": "Service function throwing raw new Error('msg') where Result<T, E> is dominant",
+      "targetFile": "src/services/billing.service.ts",
+      "detected": true,
+      "reportedViolation": {
+        "file": "src/services/billing.service.ts",
+        "line": 1,
+        "expected": "result-pattern",
+        "observed": "throw"
+      }
+    },
+    {
+      "id": 2,
+      "category": "error-handling",
+      "description": "Service function returning { success: false, error: 'msg' } where Result is dominant",
+      "targetFile": "src/services/user.service.ts",
+      "detected": true,
+      "reportedViolation": {
+        "file": "src/services/user.service.ts",
+        "line": 1,
+        "expected": "result-pattern",
+        "observed": "success-boolean"
+      }
+    },
+    {
+      "id": 3,
+      "category": "error-handling",
+      "description": "Service function returning { error: 'failed' } where Result is dominant",
+      "targetFile": "src/services/order.service.ts",
+      "detected": true,
+      "reportedViolation": {
+        "file": "src/services/order.service.ts",
+        "line": 1,
+        "expected": "result-pattern",
+        "observed": "error-object"
+      }
+    },
+    {
+      "id": 4,
+      "category": "error-handling",
+      "description": "Service function throwing raw string (throw 'unauthorized')",
+      "targetFile": "src/services/auth.service.ts",
+      "detected": true,
+      "reportedViolation": {
+        "file": "src/services/auth.service.ts",
+        "line": 1,
+        "expected": "result-pattern",
+        "observed": "throw"
+      }
+    },
+    {
+      "id": 5,
+      "category": "error-handling",
+      "description": "Controller method throwing untyped custom exception",
+      "targetFile": "src/controllers/auth.controller.ts",
+      "detected": false,
+      "reportedViolation": null
+    },
+    {
+      "id": 6,
+      "category": "error-handling",
+      "description": "Service method returning undefined silently on error",
+      "targetFile": "src/services/inventory.service.ts",
+      "detected": false,
+      "reportedViolation": null
+    },
+    {
+      "id": 7,
+      "category": "library-redundancy",
+      "description": "Rogue axios imported in service",
+      "targetFile": "src/services/shipping.service.ts",
+      "detected": true,
+      "reportedViolation": {
+        "file": "src/services/shipping.service.ts",
+        "line": 1,
+        "expected": "native-fetch",
+        "observed": "axios"
+      }
+    },
+    {
+      "id": 8,
+      "category": "library-redundancy",
+      "description": "Rogue got imported in service",
+      "targetFile": "src/services/analytics.service.ts",
+      "detected": true,
+      "reportedViolation": {
+        "file": "src/services/analytics.service.ts",
+        "line": 1,
+        "expected": "native-fetch",
+        "observed": "got"
+      }
+    },
+    {
+      "id": 9,
+      "category": "library-redundancy",
+      "description": "Rogue superagent imported in service",
+      "targetFile": "src/services/audit.service.ts",
+      "detected": true,
+      "reportedViolation": {
+        "file": "src/services/audit.service.ts",
+        "line": 1,
+        "expected": "native-fetch",
+        "observed": "superagent"
+      }
+    },
+    {
+      "id": 10,
+      "category": "library-redundancy",
+      "description": "Rogue yup schema declaration in validation module",
+      "targetFile": "src/schemas/checkout.schema.ts",
+      "detected": true,
+      "reportedViolation": {
+        "file": "src/schemas/checkout.schema.ts",
+        "line": 1,
+        "expected": "zod",
+        "observed": "yup"
+      }
+    },
+    {
+      "id": 11,
+      "category": "library-redundancy",
+      "description": "Rogue joi validator in validation module",
+      "targetFile": "src/schemas/profile.schema.ts",
+      "detected": true,
+      "reportedViolation": {
+        "file": "src/schemas/profile.schema.ts",
+        "line": 1,
+        "expected": "zod",
+        "observed": "joi"
+      }
+    },
+    {
+      "id": 12,
+      "category": "library-redundancy",
+      "description": "Rogue jotai atom in store module",
+      "targetFile": "src/stores/theme.store.ts",
+      "detected": true,
+      "reportedViolation": {
+        "file": "src/stores/theme.store.ts",
+        "line": 1,
+        "expected": "zustand",
+        "observed": "jotai"
+      }
+    },
+    {
+      "id": 13,
+      "category": "library-redundancy",
+      "description": "Rogue mobx observable in store module",
+      "targetFile": "src/stores/settings.store.ts",
+      "detected": true,
+      "reportedViolation": {
+        "file": "src/stores/settings.store.ts",
+        "line": 1,
+        "expected": "zustand",
+        "observed": "mobx"
+      }
+    },
+    {
+      "id": 14,
+      "category": "layer-inversion",
+      "description": "UI Component importing @prisma/client directly",
+      "targetFile": "src/components/UserCard.tsx",
+      "detected": false,
+      "reportedViolation": null
+    },
+    {
+      "id": 15,
+      "category": "layer-inversion",
+      "description": "UI Component importing server-only database repository",
+      "targetFile": "src/components/OrderList.tsx",
+      "detected": false,
+      "reportedViolation": null
+    },
+    {
+      "id": 16,
+      "category": "layer-inversion",
+      "description": "Service layer importing presentation component (components/Button)",
+      "targetFile": "src/services/notification.service.ts",
+      "detected": false,
+      "reportedViolation": null
+    },
+    {
+      "id": 17,
+      "category": "layer-inversion",
+      "description": "Controller directly executing low-level raw SQL driver",
+      "targetFile": "src/controllers/payment.controller.ts",
+      "detected": false,
+      "reportedViolation": null
+    },
+    {
+      "id": 18,
+      "category": "global-calls",
+      "description": "Raw global fetch() call inside UI component bypassing client wrapper",
+      "targetFile": "src/components/LiveFeed.tsx",
+      "detected": false,
+      "reportedViolation": null
+    },
+    {
+      "id": 19,
+      "category": "global-calls",
+      "description": "Raw global fetch() call in service without error handling",
+      "targetFile": "src/services/sync.service.ts",
+      "detected": false,
+      "reportedViolation": null
+    },
+    {
+      "id": 20,
+      "category": "global-calls",
+      "description": "Raw global fetch() call in utility without project headers",
+      "targetFile": "src/utils/telemetry.ts",
+      "detected": false,
+      "reportedViolation": null
+    }
+  ]
+}

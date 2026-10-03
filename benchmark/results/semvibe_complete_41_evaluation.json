@@ -1,0 +1,454 @@
+{
+  "totalFindings": 41,
+  "dub": {
+    "total": 21,
+    "tp": 7,
+    "fpIntentional": 14,
+    "fpNoise": 0,
+    "precision": {
+      "k": 7,
+      "n": 21,
+      "p": 33.3,
+      "low": 17.2,
+      "high": 54.6
+    }
+  },
+  "calcom": {
+    "total": 20,
+    "tp": 9,
+    "fpIntentional": 11,
+    "fpNoise": 0,
+    "precision": {
+      "k": 9,
+      "n": 20,
+      "p": 45,
+      "low": 25.8,
+      "high": 65.8
+    }
+  },
+  "overall": {
+    "total": 41,
+    "tp": 16,
+    "fpIntentional": 25,
+    "fpNoise": 0,
+    "precision": {
+      "k": 16,
+      "n": 41,
+      "p": 39,
+      "low": 25.7,
+      "high": 54.3
+    }
+  },
+  "findings": [
+    {
+      "num": 1,
+      "repo": "dubinc/dub",
+      "loc": "ui/support/ticket-upload.tsx:30",
+      "fn": "uploadToPlain()",
+      "observed": "error-object",
+      "expected": "throw",
+      "label": "TP",
+      "rationale": "uploadToPlain is an internal helper in ticket upload that returns { error: \"Failed...\" } while 95%+ of Dub server/internal modules throw AppError. Deviates from dominant convention."
+    },
+    {
+      "num": 2,
+      "repo": "dubinc/dub",
+      "loc": "ui/partners/rewards/ai-reward-builder.tsx:161",
+      "fn": "useAIRewardBuilder()",
+      "observed": "error-object",
+      "expected": "throw",
+      "label": "FP-Intentional",
+      "rationale": "React client hook returning error state for form UI rendering; client UI state differs intentionally from backend throw convention."
+    },
+    {
+      "num": 3,
+      "repo": "dubinc/dub",
+      "loc": "ui/partners/bounties/use-social-content.ts:11",
+      "fn": "useSocialContent()",
+      "observed": "error-object",
+      "expected": "throw",
+      "label": "FP-Intentional",
+      "rationale": "React client hook returning error state for SWR/UI."
+    },
+    {
+      "num": 4,
+      "repo": "dubinc/dub",
+      "loc": "app/app.dub.co/(dashboard)/[slug]/(ee)/program/campaigns/use-campaigns-count.tsx:13",
+      "fn": "useCampaignsCount()",
+      "observed": "error-object",
+      "expected": "throw",
+      "label": "FP-Intentional",
+      "rationale": "React client hook returning error state for dashboard stats."
+    },
+    {
+      "num": 5,
+      "repo": "dubinc/dub",
+      "loc": "app/app.dub.co/(dashboard)/[slug]/(ee)/program/campaigns/use-campaign.tsx:7",
+      "fn": "useCampaign()",
+      "observed": "error-object",
+      "expected": "throw",
+      "label": "FP-Intentional",
+      "rationale": "React client hook returning error state for single campaign view."
+    },
+    {
+      "num": 6,
+      "repo": "dubinc/dub",
+      "loc": "lib/api/errors.ts:65",
+      "fn": "fromZodError()",
+      "observed": "error-object",
+      "expected": "throw",
+      "label": "FP-Intentional",
+      "rationale": "Error utility function whose exact purpose is formatting/mapping Zod errors into an error object before throwing/returning; intentional utility signature."
+    },
+    {
+      "num": 7,
+      "repo": "dubinc/dub",
+      "loc": "lib/api/errors.ts:93",
+      "fn": "handleApiError()",
+      "observed": "error-object",
+      "expected": "throw",
+      "label": "FP-Intentional",
+      "rationale": "Error handler utility that formats errors into JSON Response objects; intentional framework adapter."
+    },
+    {
+      "num": 8,
+      "repo": "dubinc/dub",
+      "loc": "lib/api/oauth/actions.ts:7",
+      "fn": "validateAuthorizeRequest()",
+      "observed": "error-object",
+      "expected": "throw",
+      "label": "FP-Intentional",
+      "rationale": "OAuth protocol validator returning RFC 6749 compliant error response objects."
+    },
+    {
+      "num": 9,
+      "repo": "dubinc/dub",
+      "loc": "lib/api/links/process-link.ts:28",
+      "fn": "processLink()",
+      "observed": "error-object",
+      "expected": "throw",
+      "label": "TP",
+      "rationale": "processLink returns { error: \"...\" } on invalid geo/tag options instead of throwing AppError/ApiError like other link service endpoints."
+    },
+    {
+      "num": 10,
+      "repo": "dubinc/dub",
+      "loc": "lib/api/domains/validate-dub-link-subdomain.ts:9",
+      "fn": "validateDubLinkSubdomain()",
+      "observed": "error-object",
+      "expected": "throw",
+      "label": "TP",
+      "rationale": "Domain validation service returning { error } instead of throw like standard domain service handlers."
+    },
+    {
+      "num": 11,
+      "repo": "dubinc/dub",
+      "loc": "lib/api/domains/utils.ts:6",
+      "fn": "validateDomain()",
+      "observed": "error-object",
+      "expected": "throw",
+      "label": "TP",
+      "rationale": "validateDomain in lib/api/domains returns { error, code } object; breaks the dominant throw new ApiError pattern."
+    },
+    {
+      "num": 12,
+      "repo": "dubinc/dub",
+      "loc": "lib/api/links/utils/key-checks.ts:12",
+      "fn": "keyChecks()",
+      "observed": "error-object",
+      "expected": "throw",
+      "label": "TP",
+      "rationale": "keyChecks in lib/api/links returns { error } object instead of throwing ApiError."
+    },
+    {
+      "num": 13,
+      "repo": "dubinc/dub",
+      "loc": "app/(ee)/api/admin/impersonate/route.ts:113",
+      "fn": "parseImpersonateQuery()",
+      "observed": "error-object",
+      "expected": "throw",
+      "label": "TP",
+      "rationale": "API route query parser returning error object instead of throwing NextResponse/ApiError."
+    },
+    {
+      "num": 14,
+      "repo": "dubinc/dub",
+      "loc": "app/(ee)/api/admin/impersonate/route.ts:343",
+      "fn": "findUser()",
+      "observed": "error-object",
+      "expected": "throw",
+      "label": "TP",
+      "rationale": "Admin impersonation route helper returning { error: \"User not found\" } instead of throwing NotFoundError."
+    },
+    {
+      "num": 15,
+      "repo": "dubinc/dub",
+      "loc": "app/(ee)/api/cron/streams/update-workspace-links-usage/route.ts:81",
+      "fn": "anonymous()",
+      "observed": "success-boolean",
+      "expected": "throw",
+      "label": "FP-Intentional",
+      "rationale": "Redis stream batch consumer returning boolean ack status."
+    },
+    {
+      "num": 16,
+      "repo": "dubinc/dub",
+      "loc": "app/(ee)/api/cron/streams/update-partner-stats/route.ts:41",
+      "fn": "anonymous()",
+      "observed": "success-boolean",
+      "expected": "throw",
+      "label": "FP-Intentional",
+      "rationale": "Redis stream consumer callback returning boolean ack status."
+    },
+    {
+      "num": 17,
+      "repo": "dubinc/dub",
+      "loc": "app/(ee)/api/cron/streams/update-click-stats/route.ts:154",
+      "fn": "anonymous()",
+      "observed": "success-boolean",
+      "expected": "throw",
+      "label": "FP-Intentional",
+      "rationale": "Redis stream consumer callback returning boolean ack status."
+    },
+    {
+      "num": 18,
+      "repo": "dubinc/dub",
+      "loc": "app/(ee)/api/cron/streams/update-click-stats/route.ts:194",
+      "fn": "anonymous()",
+      "observed": "success-boolean",
+      "expected": "throw",
+      "label": "FP-Intentional",
+      "rationale": "Redis stream consumer callback returning boolean ack status."
+    },
+    {
+      "num": 19,
+      "repo": "dubinc/dub",
+      "loc": "app/(ee)/api/cron/streams/update-click-stats/route.ts:220",
+      "fn": "anonymous()",
+      "observed": "success-boolean",
+      "expected": "throw",
+      "label": "FP-Intentional",
+      "rationale": "Redis stream consumer callback returning boolean ack status."
+    },
+    {
+      "num": 20,
+      "repo": "dubinc/dub",
+      "loc": "app/(ee)/api/cron/streams/update-click-stats/route.ts:243",
+      "fn": "anonymous()",
+      "observed": "success-boolean",
+      "expected": "throw",
+      "label": "FP-Intentional",
+      "rationale": "Redis stream consumer callback returning boolean ack status."
+    },
+    {
+      "num": 21,
+      "repo": "dubinc/dub",
+      "loc": "app/(ee)/api/cron/import/csv/route.ts:136",
+      "fn": "mapCsvRowToLink()",
+      "observed": "success-boolean",
+      "expected": "throw",
+      "label": "FP-Intentional",
+      "rationale": "CSV import row mapper returning boolean success flag for row filter."
+    },
+    {
+      "num": 1,
+      "repo": "calcom/cal.com",
+      "loc": "conferencing/lib/videoClient.ts:105",
+      "fn": "updateMeeting()",
+      "observed": "result-pattern",
+      "expected": "throw",
+      "label": "TP",
+      "rationale": "Video conferencing client returns custom result tuple instead of raising TRPCError/CalendarError."
+    },
+    {
+      "num": 2,
+      "repo": "calcom/cal.com",
+      "loc": "calendars/lib/CalendarManager.ts:130",
+      "fn": "anonymous()",
+      "observed": "error-object",
+      "expected": "throw",
+      "label": "TP",
+      "rationale": "Calendar manager async callback returns error object instead of throwing standard calendar exception."
+    },
+    {
+      "num": 3,
+      "repo": "calcom/cal.com",
+      "loc": "calendars/lib/CalendarManager.ts:296",
+      "fn": "getBusyCalendarTimes()",
+      "observed": "success-boolean",
+      "expected": "throw",
+      "label": "FP-Intentional",
+      "rationale": "Calendar query returning boolean status flag for cache/busy checks."
+    },
+    {
+      "num": 4,
+      "repo": "calcom/cal.com",
+      "loc": "calendars/lib/CalendarManager.ts:360",
+      "fn": "createEvent()",
+      "observed": "result-pattern",
+      "expected": "throw",
+      "label": "TP",
+      "rationale": "createEvent returns result pattern tuple while calendar event management dominantly throws CalendarServiceError."
+    },
+    {
+      "num": 5,
+      "repo": "calcom/cal.com",
+      "loc": "calendars/lib/CalendarManager.ts:453",
+      "fn": "updateEvent()",
+      "observed": "result-pattern",
+      "expected": "throw",
+      "label": "TP",
+      "rationale": "updateEvent returns result pattern tuple deviating from throw convention."
+    },
+    {
+      "num": 6,
+      "repo": "calcom/cal.com",
+      "loc": "bookings/lib/EventManager.ts:377",
+      "fn": "isCalendarResult()",
+      "observed": "result-pattern",
+      "expected": "throw",
+      "label": "TP",
+      "rationale": "EventManager type guard / result handler uses custom result pattern deviating from canonical contract."
+    },
+    {
+      "num": 7,
+      "repo": "calcom/cal.com",
+      "loc": "bookings/lib/EventManager.ts:1100",
+      "fn": "updateAllCalendarEvents()",
+      "observed": "result-pattern",
+      "expected": "throw",
+      "label": "TP",
+      "rationale": "updateAllCalendarEvents returns result pattern tuple."
+    },
+    {
+      "num": 8,
+      "repo": "calcom/cal.com",
+      "loc": "bookings/lib/EventManager.ts:1192",
+      "fn": "anonymous()",
+      "observed": "success-boolean",
+      "expected": "throw",
+      "label": "FP-Intentional",
+      "rationale": "Batch event update iterator returning boolean status."
+    },
+    {
+      "num": 9,
+      "repo": "calcom/cal.com",
+      "loc": "bookings/lib/EventManager.ts:1219",
+      "fn": "anonymous()",
+      "observed": "success-boolean",
+      "expected": "throw",
+      "label": "FP-Intentional",
+      "rationale": "Batch event update iterator returning boolean status."
+    },
+    {
+      "num": 10,
+      "repo": "calcom/cal.com",
+      "loc": "watchlist/lib/service/WatchlistOperationsService.ts:67",
+      "fn": "createWatchlistEntry()",
+      "observed": "success-boolean",
+      "expected": "throw",
+      "label": "FP-Intentional",
+      "rationale": "Watchlist service method returning boolean success flag."
+    },
+    {
+      "num": 11,
+      "repo": "calcom/cal.com",
+      "loc": "watchlist/lib/service/WatchlistOperationsService.ts:88",
+      "fn": "deleteWatchlistEntry()",
+      "observed": "success-boolean",
+      "expected": "throw",
+      "label": "FP-Intentional",
+      "rationale": "Watchlist deletion service method returning boolean status."
+    },
+    {
+      "num": 12,
+      "repo": "calcom/cal.com",
+      "loc": "watchlist/lib/service/OrganizationWatchlistOperationsService.ts:73",
+      "fn": "addToWatchlistByEmail()",
+      "observed": "success-boolean",
+      "expected": "throw",
+      "label": "FP-Intentional",
+      "rationale": "Watchlist bulk operation returning boolean status."
+    },
+    {
+      "num": 13,
+      "repo": "calcom/cal.com",
+      "loc": "watchlist/lib/service/AdminWatchlistOperationsService.ts:157",
+      "fn": "addToWatchlistByEmail()",
+      "observed": "success-boolean",
+      "expected": "throw",
+      "label": "FP-Intentional",
+      "rationale": "Watchlist bulk operation returning boolean status."
+    },
+    {
+      "num": 14,
+      "repo": "calcom/cal.com",
+      "loc": "watchlist/lib/service/AdminWatchlistOperationsService.ts:228",
+      "fn": "bulkDismissReportsByEmail()",
+      "observed": "success-boolean",
+      "expected": "throw",
+      "label": "FP-Intentional",
+      "rationale": "Bulk dismissal operation returning boolean status."
+    },
+    {
+      "num": 15,
+      "repo": "calcom/cal.com",
+      "loc": "webhooks/lib/service/WebhookService.ts:270",
+      "fn": "anonymous()",
+      "observed": "success-boolean",
+      "expected": "throw",
+      "label": "FP-Intentional",
+      "rationale": "Webhook retry worker callback returning boolean delivery flag."
+    },
+    {
+      "num": 16,
+      "repo": "calcom/cal.com",
+      "loc": "auth/signup/lib/fetchSignup.ts:28",
+      "fn": "fetchSignup()",
+      "observed": "error-object",
+      "expected": "throw",
+      "label": "TP",
+      "rationale": "fetchSignup returns { error } object instead of throwing TRPCError/AuthError."
+    },
+    {
+      "num": 17,
+      "repo": "calcom/cal.com",
+      "loc": "oauth/services/OAuthService.ts:234",
+      "fn": "mapErrorToOAuthError()",
+      "observed": "error-object",
+      "expected": "throw",
+      "label": "FP-Intentional",
+      "rationale": "OAuth standard error mapper returning RFC compliant error response."
+    },
+    {
+      "num": 18,
+      "repo": "calcom/cal.com",
+      "loc": "oauth/services/OAuthService.ts:385",
+      "fn": "verifyPKCE()",
+      "observed": "error-object",
+      "expected": "throw",
+      "label": "FP-Intentional",
+      "rationale": "PKCE validation returning RFC 7636 error object."
+    },
+    {
+      "num": 19,
+      "repo": "calcom/cal.com",
+      "loc": "api-keys-legacy/api-keys/services/ApiKeyService.ts:26",
+      "fn": "verifyKeyByHashedKey()",
+      "observed": "error-object",
+      "expected": "throw",
+      "label": "TP",
+      "rationale": "ApiKeyService returns error object on invalid key rather than throwing ApiKeyError."
+    },
+    {
+      "num": 20,
+      "repo": "calcom/cal.com",
+      "loc": "auth/signup/utils/prefillAvatar.ts:1",
+      "fn": "prefillAvatar.ts",
+      "observed": "node-fetch",
+      "expected": "native-fetch",
+      "label": "TP",
+      "rationale": "Imports node-fetch when packages/features globally uses native global fetch. Genuine library redundancy outlier."
+    }
+  ]
+}
