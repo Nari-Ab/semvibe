@@ -18,6 +18,13 @@ Do NOT ask vague overall impressions. For **every individual finding** flagged b
 
 Record the developer's exact verbatim words without leading or defending the tool.
 
+### 2.1 Adoption Scale (Realistic Workflow Tiers)
+After reviewing the findings, assess interest across 3 realistic workflow tiers:
+- **Tier 1 (One-off fix):** Would fix the flagged TPs manually right now.
+- **Tier 2 (Non-blocking PR Bot / Warning - POSITIVE SIGNAL TARGET):** "Would you install this as an informational GitHub Actions check / PR comment (non-blocking advisory)?" $\to$ **$\ge 3/5$ agreeing to Tier 2 constitutes a PASS (Go).**
+- **Tier 3 (Blocking CI):** "Would you block PR merges on this?" $\to$ Treated as a stretch bonus, not a requirement.
+
+
 ---
 
 ### 3. Pre-Registered Decision Matrix (Handling the "In-Between" Case)
