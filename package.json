@@ -9,6 +9,7 @@
   "scripts": {
     "build": "tsc",
     "test": "vitest run",
+    "benchmark": "node --loader ts-node/esm scripts/benchmark.ts",
     "dev": "ts-node src/cli.ts",
     "start": "node dist/cli.js"
   },

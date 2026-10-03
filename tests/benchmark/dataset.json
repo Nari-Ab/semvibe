@@ -1,0 +1,61 @@
+{
+  "description": "Ground truth architectural dataset for Semvibe validation",
+  "samples": [
+    {
+      "id": "viol-1",
+      "type": "error-handling",
+      "expectedPattern": "result-pattern",
+      "observedPattern": "throw",
+      "isGenuineViolation": true,
+      "codeSnippet": "export async function chargeCard(token: string) { if (!token) throw new Error('Bad token'); return api.charge(token); }",
+      "invariant": "Services must return Result<T, PaymentError>"
+    },
+    {
+      "id": "viol-2",
+      "type": "error-handling",
+      "expectedPattern": "result-pattern",
+      "observedPattern": "throw",
+      "isGenuineViolation": true,
+      "codeSnippet": "export function findUser(id: string) { if (!id) throw new Error('User not found'); return db.users.find(id); }",
+      "invariant": "Services must return Result<T, AppError>"
+    },
+    {
+      "id": "viol-3",
+      "type": "library-role",
+      "expectedPattern": "axios",
+      "observedPattern": "native-fetch",
+      "isGenuineViolation": true,
+      "codeSnippet": "export async function getNotifications() { return fetch('https://api.service.com/alerts'); }",
+      "invariant": "Project standardizes on axios for HTTP"
+    },
+    {
+      "id": "viol-4",
+      "type": "library-role",
+      "expectedPattern": "zod",
+      "observedPattern": "yup",
+      "isGenuineViolation": true,
+      "codeSnippet": "import * as yup from 'yup'; export const schema = yup.object({ name: yup.string() });",
+      "invariant": "Project standardizes on zod for schema validation"
+    },
+    {
+      "id": "exc-1",
+      "type": "error-handling",
+      "expectedPattern": "result-pattern",
+      "observedPattern": "throw",
+      "isGenuineViolation": false,
+      "codeSnippet": "export function assertServerEnv() { if (!process.env.DATABASE_URL) throw new Error('FATAL: DATABASE_URL is missing!'); }",
+      "invariant": "Services must return Result<T, AppError>",
+      "reasoning": "Fatal startup check; crashing the process is intentional behavior, not drift."
+    },
+    {
+      "id": "exc-2",
+      "type": "error-handling",
+      "expectedPattern": "result-pattern",
+      "observedPattern": "throw",
+      "isGenuineViolation": false,
+      "codeSnippet": "export function invariant(condition: boolean, msg: string): asserts condition { if (!condition) throw new Error(msg); }",
+      "invariant": "Services must return Result<T, AppError>",
+      "reasoning": "Standard TypeScript invariant assertion helper."
+    }
+  ]
+}
