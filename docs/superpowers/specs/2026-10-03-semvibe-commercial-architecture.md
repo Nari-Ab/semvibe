@@ -1,152 +1,101 @@
-# Semvibe: Commercial Architectural Integrity Platform for the AI Vibe-Coding Era
-**Specification & Architectural Design**
+# Semvibe: Semantic Inconsistency & Architectural Integrity Platform
+**Product Specification & Technical Architecture (Revised)**
 *Date: 2026-10-03*
-*Status: Approved for Planning*
+*Status: Approved for Planning (Phase 1 Lean MVP)*
 
 ---
 
-## 1. Executive Summary & Vision
+## 1. Executive Summary & Problem Space
 
-### 1.1 The Problem
-In 2026, AI coding assistants (Cursor, Claude Code, GitHub Copilot, Windsurf) have made code generation orders of magnitude faster. However, AI agents operate with **local context windows**: they optimize for passing the current prompt or single test, but possess zero awareness of global repository architecture.
+### 1.1 The Problem in the AI Vibe-Coding Era
+AI coding assistants (Cursor, Claude Code, GitHub Copilot, Windsurf) have made local code generation orders of magnitude faster. However, AI agents operate within **local context windows**: they optimize for passing the immediate prompt or test, without understanding the repository's broader architectural conventions.
 
-This causes rapid **Architectural Drift & Erosion**:
-1. **Redundant Implementations:** Multiple slightly different HTTP clients, formatting helpers, and cache layers created by different prompts.
-2. **Layering Inversion:** UI components querying databases directly, business logic leaking into presentation controllers.
+This causes rapid **Architectural Drift & Semantic Inconsistency**:
+1. **Redundant Implementations:** Multiple slightly different HTTP clients, formatting helpers, or caching wrappers generated across different prompts.
+2. **Layering Inversion:** UI components querying databases directly or controllers bypassing service layers.
 3. **Convention Fragmentation:** Mixing disparate error-handling schemas (`Result<T, E>` vs `throw new Error` vs `{ success: false }`), state libraries, and validation patterns in the same codebase.
-4. **Agent Amnesia:** Every new AI prompt starts from scratch, repeating anti-patterns.
+4. **Agent Amnesia:** Every new AI prompt starts without architectural guardrails, repeating anti-patterns.
 
-### 1.2 The Solution
-**Semvibe** is the **Architectural Guardrail & Intelligence Engine for AI-assisted engineering**.
-Unlike legacy tools that require tedious manual configuration files (`architecture.yml`), Semvibe automatically discovers the codebase's latent architectural invariants via AST clustering and enforces them using a **hybrid AST + Semantic AI engine**.
-
-### 1.3 The Core Moat
-* **Zero-Config Discovery (`semvibe learn`):** Automatically extracts 90%+ architectural invariants from existing code without manual setup.
-* **Hybrid Two-Phase Pipeline:** Fast AST extraction (0 tokens, millisecond execution) + targeted LLM semantic validation only on statistical outliers (90% cost savings compared to brute-force LLM scanning).
-* **Agent-First Native MCP (`semvibe mcp`):** Directly embeds into Claude Code, Cursor, and Windsurf, feeding architecture constraints into agents *before* they generate code.
-* **Autonomous Remediation (`semvibe fix`):** Generates unified diffs and PRs that automatically align deviant code to the project's standard pattern.
+### 1.2 The Solution & Moat: Semantic Outlier Detection
+**Semvibe** is a **semantic inconsistency detector** built specifically for TypeScript/JavaScript codebases.
+Unlike generic AI code reviewers or rigid static linters:
+* **Zero-Config Discovery (`semvibe learn`):** Automatically extracts statistically dominant architectural patterns across the repository (e.g. "93% of services return `Result<T, E>`", "100% of DB calls go through repositories").
+* **Candidate Invariant Verification:** Presents discovered patterns to the developer as *candidate invariants* with human confirmation, avoiding false alarms during migrations.
+* **Hybrid AST + Targeted LLM Engine:** Uses fast, zero-token AST analysis to filter the codebase and cluster patterns, sending only statistical anomalies to the LLM for deep semantic verification.
+* **Instant Prevention via Rules Export (`semvibe export-rules`):** Compiles verified invariants into `.cursorrules`, `CLAUDE.md`, and `.windsurfrules` with zero friction—giving AI agents architectural guardrails *before* code is generated, without requiring a running daemon.
 
 ---
 
-## 2. Market Analysis, Competitors & Commercialization
+## 2. Market Analysis & Realistic Competitor Positioning
 
-### 2.1 Competitive Landscape
-| Feature / Metric | Drift (`drift-analyzer`) | SonarQube / Snyk | Revieko / GyroCompass | **Semvibe** |
+| Tool | Core Technology | Primary Focus & Languages | Strengths | Limitations / Gaps Semvibe Solves |
 | :--- | :--- | :--- | :--- | :--- |
-| **Engine** | Deterministic AST (22 rules) | Static AST / Security | Git baseline / Yaml rules | **Hybrid: AST + Semantic LLM** |
-| **Semantic Understanding** | ❌ None (blind to intent) | ❌ None | ⚠️ Minimal | ✅ **Full semantic intent analysis** |
-| **Configuration Friction** | Manual config | Complex enterprise setup | Requires manual `architecture.yml` | ✅ **Zero-Config (`semvibe learn`)** |
-| **AI Agent MCP Integration** | Basic CLI only | ❌ None | ❌ None | ✅ **Native MCP Server (`semvibe mcp`)** |
-| **Auto-Fix Capabilities** | ❌ Manual rewrite | ❌ Static suggestions | ❌ Warning only | ✅ **`semvibe fix` (AI Auto-Align)** |
-| **Multi-Provider Support** | N/A (no AI) | Proprietary / None | Fixed cloud API | ✅ **OmniRoute, Ollama, BYOK** |
-
-### 2.2 Monetization Tiers
-* **Community / OSS (Free):** Local CLI scanner, BYOK (OpenAI, Anthropic) or local Ollama / OmniRoute, terminal reports. Drives top-of-funnel developer adoption.
-* **Pro Tier ($19 / dev / month):**
-  * `semvibe fix` autonomous refactoring patches.
-  * `semvibe mcp` for Cursor / Claude Code IDE integration.
-  * Local cross-commit trend tracking & caching.
-* **Team & Enterprise ($49 / seat / month):**
-  * GitHub App / GitLab CI automated PR reviews & blocking gates.
-  * Centralized architectural invariant synchronization across team repositories.
-  * Architectural Health & Technical Debt Scorecard for Engineering Leads and CTOs.
+| **Drift (`drift-analyzer`)** | Deterministic AST (22 rules, local SQLite, MCP server, `fix-plan`) | Multi-language (Python, Go, Rust, TS experimental) | Fast, local, no API keys needed, zero-config run | Lacks deep semantic intent analysis; rules are deterministic heuristics; TS support is secondary. |
+| **Greptile** | Full-repo semantic indexing + PR review bot | Multi-language B2B | Excellent at catching missing shared middleware / auth in PRs | Heavy SaaS product; focused on PR code review rather than local developer workflow and invariant extraction. |
+| **SonarQube / Snyk** | Static AST + CVE databases | Enterprise multi-language | Deep security vulnerability analysis, code coverage | Blind to AI-generation quirks, library redundancy, and semantic architectural drift. |
+| **Semvibe (Ours)** | **Hybrid:** AST Feature Extractor + Statistical Clustering + Targeted LLM Verification | **TypeScript / JavaScript first** (Node, React, Next.js, Express) | Automatic invariant discovery, zero-config `.cursorrules` export, low token cost, high precision on TS conventions. | Dedicated focus on semantic consistency and agent alignment in the modern TS/JS ecosystem. |
 
 ---
 
-## 3. System Architecture & Component Breakdown
+## 3. Critical Technical Design Decisions
 
-```
-┌────────────────────────────────────────────────────────────────────────┐
-│                        User & Agent Entrypoints                        │
-│   CLI (`semvibe scan|learn|fix`)  │  MCP Server  │  GitHub Action CI   │
-└───────────────────────────────────┬────────────────────────────────────┘
-                                    │
-                                    ▼
-┌────────────────────────────────────────────────────────────────────────┐
-│                          Core Pipeline Engine                          │
-│                                                                        │
-│   ┌────────────────────────────────────────────────────────────────┐   │
-│   │ 1. AST Structural Extractor (`@semvibe/core/extractor`)        │   │
-│   │    - Import dependency graph & circular reference detection    │   │
-│   │    - Layer boundary mapping (UI -> Domain -> Infrastructure)   │   │
-│   │    - Function signature, return type & error pattern matrix    │   │
-│   └───────────────────────────────┬────────────────────────────────┘   │
-│                                   │ AST Signatures                     │
-│                                   ▼                                    │
-│   ┌────────────────────────────────────────────────────────────────┐   │
-│   │ 2. Invariant Discovery & Clustering (`@semvibe/core/invariants`)│  │
-│   │    - Statistical pattern clustering (e.g. 95% use Result<T,E>) │   │
-│   │    - Outlier identification (deviations from dominant pattern) │   │
-│   │    - Baseline invariant persistence (`.semvibe/invariants.json`)│  │
-│   └───────────────────────────────┬────────────────────────────────┘   │
-│                                   │ Suspect Outliers + Invariants      │
-│                                   ▼                                    │
-│   ┌────────────────────────────────────────────────────────────────┐   │
-│   │ 3. Semantic Verification Engine (`@semvibe/llm`)               │   │
-│   │    - Verified prompt construction with exemplary code snippets │   │
-│   │    - Multi-provider router: OmniRoute (fallback) / Ollama / API│   │
-│   │    - Structured JSON verdict (False positive vs True violation)│   │
-│   └───────────────────────────────┬────────────────────────────────┘   │
-│                                   │ Clean Violations                   │
-│                                   ▼                                    │
-│   ┌────────────────────────────────────────────────────────────────┐   │
-│   │ 4. Action & Remediation Engine (`@semvibe/remediation`)        │   │
-│   │    - Unified Diff generator (`semvibe fix`)                    │   │
-│   │    - Interactive CLI terminal reporting (Chalk / Tables)       │   │
-│   │    - SARIF / GitHub PR Check Annotations                       │   │
-│   └────────────────────────────────────────────────────────────────┘   │
-└────────────────────────────────────────────────────────────────────────┘
-```
+### 3.1 Resolving the "Dominant Pattern ≠ Truth" Problem (Migrations & Fragmentation)
+1. **Candidate Invariants + Human Confirmation:**
+   When running `semvibe learn`, the engine does not unilaterally declare dominant patterns as immutable laws. It outputs candidate invariants with confidence scores:
+   ```
+   Found 2 candidate invariants:
+   [1] Error Handling: 88% of services return Result<T, AppError> (12% throw raw Error)
+   [2] HTTP Client: 100% of API calls use lib/api-client (0% use native fetch)
+   Save to .semvibe/invariants.json? [Y/n/edit]
+   ```
+2. **Freshness Bias (Git Recency Weighting):**
+   Code modified in the last 30 days is weighted higher during clustering. If a team is migrating from `throw` to `Result`, recent files will be recognized as the emerging target standard.
+3. **Handling High Fragmentation (e.g. 40% / 35% / 25% split):**
+   If no single pattern exceeds the dominance threshold (default: 75%), Semvibe does **not** invent false outliers. Instead, it flags an **"Unresolved Style Divergence"** report, notifying the developer that the codebase is split and needs an architectural decision.
+
+### 3.2 Target Quality & Evaluation Benchmark
+* **Primary Metric:** **Precision > 80%** (Low false-positive rate is mandatory for developer trust).
+* **Validation Benchmark:**
+  * 5 real open-source TypeScript repositories (varying from strict clean architecture to heavily AI-generated apps).
+  * 50 manually labeled architectural findings (real violations vs intentional exceptions).
+* **Go / No-Go Gate for Phase 2:**
+  Before building SaaS, GitHub Bots, or Enterprise features, the Phase 1 CLI must achieve:
+  1. Precision ≥ 80% on the benchmark.
+  2. At least 3 genuine architectural inconsistencies caught that deterministic tools (ESLint / Drift) missed.
+  3. Positive feedback from 3–5 active AI vibe-coders (Cursor/Claude Code users).
 
 ---
 
-## 4. Detailed Component Specifications
+## 4. Phase 1 Lean MVP Scope (1–2 Weeks Execution)
 
-### 4.1 `@semvibe/core`
-* **File Scanner & Ignore Filter:** Scans project files respecting `.gitignore` and default exclusions (`node_modules`, `dist`, `.git`).
-* **AST Extractor (`extractor.ts`):** Parses TypeScript/JavaScript files into AST nodes using TypeScript Compiler API:
-  * Extract imports (external package vs internal layer relative import).
-  * Extract exports (classes, functions, interfaces, types).
-  * Extract call patterns (error throwing, HTTP client invocations, DB queries).
-* **Invariant Learner (`invariants.ts`):** Computes architectural norms:
-  * Layer access rules: e.g. `src/components/*` must never import `src/db/*`.
-  * Return conventions: e.g. `src/services/*` always return `Promise<Result<...>>`.
-  * External library norms: e.g. single state manager (`zustand`), single validator (`zod`).
+### Included in Phase 1:
+1. **`@semvibe/core` (AST Extractor & Classifier):**
+   * Uses TypeScript Compiler API (`ts-morph` or `@babel/parser` / `@typescript-eslint`).
+   * Extracts:
+     - **Import & Layer Matrix:** which directory imports which.
+     - **Error Handling Signatures:** `throw`, `return Result`, `return { error }`, `try/catch`.
+     - **Library Redundancy:** detecting duplicate dependencies for the same role (e.g. Axios + fetch, Zod + Yup, Zustand + Redux).
+2. **`@semvibe/invariants` (Statistical Clustering):**
+   * Computes pattern distribution and flags outliers (threshold > 75% dominance).
+   * Generates candidate `.semvibe/invariants.json`.
+3. **`@semvibe/llm` (Targeted Semantic Verifier):**
+   * Verifies only statistical outliers using configurable LLM (Anthropic API / local Ollama / OpenAI-compatible endpoint).
+   * Verifies whether the outlier is a genuine semantic bug/drift or an acceptable special case.
+4. **`@semvibe/cli`:**
+   * `semvibe learn`: Scans project, displays candidate invariants, saves config.
+   * `semvibe scan`: Scans for deviations, outputs rich terminal report.
+   * `semvibe export-rules`: Generates/updates `.cursorrules`, `CLAUDE.md`, and `.windsurfrules`.
 
-### 4.2 `@semvibe/llm`
-* **Router & Provider Adapter:**
-  * Primary: Local OmniRoute (`http://localhost:20128/v1`) with fallback.
-  * Direct Anthropic API (`claude-3-5-haiku` / `claude-3-7-sonnet`).
-  * Direct Ollama (`qwen2.5-coder` / `llama3.3`).
-* **Verification Prompts:** Structured JSON output schema enforcing strict schema validation (title, description, severity, deviant_code, standard_pattern, remediation_patch).
-
-### 4.3 `@semvibe/mcp`
-* **MCP Protocol Tools:**
-  * `semvibe_get_architecture_rules`: Returns active architectural invariants for the project so agents know constraints before writing code.
-  * `semvibe_validate_code`: Validates proposed code snippet or file against architecture rules before commit.
-  * `semvibe_suggest_fix`: Returns recommended refactoring diff for an existing violation.
-
-### 4.4 `@semvibe/remediation`
-* **`semvibe fix` command:**
-  * Takes violation coordinates.
-  * Prompts LLM to rewrite deviant segment strictly adhering to the dominant baseline pattern.
-  * Applies diff or produces `.patch` file with interactive confirmation.
+### Deferred to Phase 2+ (Post-Validation):
+* ⏸ Full Native MCP Server daemon (replaced in Phase 1 by instantaneous `export-rules`).
+* ⏸ Autonomous `semvibe fix` git patcher (developer's existing agent can fix code once pointed to the invariant).
+* ⏸ GitHub Action PR bot & SARIF reports.
+* ⏸ Web Dashboard, Cloud Sync & Team SaaS tiers.
 
 ---
 
-## 5. Implementation Roadmap (Phases)
+## 5. Commercial Model (Hypotheses)
 
-* **Phase 1: Hybrid Core Engine:** TypeScript AST extractor for imports, layers, and error patterns + statistical outlier detection.
-* **Phase 2: Universal LLM Router Integration:** Connect to OmniRoute (auto-fallback across 300+ models) and direct providers.
-* **Phase 3: CLI Command Suite:** `semvibe scan`, `semvibe learn`, `semvibe init`, and rich terminal reports.
-* **Phase 4: Agent Guardrail MCP Server:** `semvibe mcp` exposing tools for Cursor and Claude Code.
-* **Phase 5: Auto-Fix Engine:** `semvibe fix` generating git patches.
-* **Phase 6: CI/CD & SARIF Integration:** GitHub Action configuration and PR reporter.
-
----
-
-## 6. Verification & Quality Gates
-
-* **Unit & AST Tests:** Ensure 100% accurate extraction of imports, layer boundaries, and AST symbols without syntax errors.
-* **Token Efficiency Benchmark:** Measure token usage compared to naive full-codebase LLM scan (target: >85% token reduction via AST filtering).
-* **Accuracy Test Suite:** Synthetic test repos with intentional architectural flaws (layer violations, duplicate HTTP clients, mixed error patterns) ensuring >95% recall and zero false positives.
+* **Open-Source Core CLI (Free):** Local scanning, candidate invariant discovery, rules export. Top-of-funnel viral acquisition.
+* **Pro Tier ($19 / dev / month — hypothesis):** Deep cross-repo semantic caching, automated remediation diffs.
+* **Team / Enterprise ($49 / seat / month — hypothesis):** Centralized team invariant enforcement, CI/CD PR blocking gates, compliance reports.
