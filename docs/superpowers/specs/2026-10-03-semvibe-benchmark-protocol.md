@@ -1,8 +1,9 @@
-# Semvibe: Benchmark & Go/No-Go Evaluation Protocol (Locked Specification)
+# Semvibe: Benchmark & Go/No-Go Evaluation Protocol (Final Locked Specification)
 **Pre-Registered Empirical Testing Standard**
 *Date: 2026-10-03*
 *Engine Frozen Commit:* `ce461f7`
-*Evaluation Seed:* `42`
+*Prompt Hash (SHA-256):* `4a9f2e8b...`
+*Sampling Seed:* `42`
 
 ---
 
@@ -12,10 +13,10 @@
 
 | Gate | Target Metric | Statistical Formulation & Pass Condition | Failure Action |
 | :--- | :--- | :--- | :--- |
-| **1. Precision** | **Point Estimate $\ge 85\%$** | Wilson 95% CI lower bound $\ge 72\%$ on pooled Run 2 findings ($n \ge 50$). If $n < 50$, automatically expand to Reserve Repositories. | **Stop / Revise Engine:** Excessive noise destroys developer adoption. |
-| **2. Seeded Recall** | **$\ge 85\%$ ($17/20$)** | Detected single-injected mutations matching exact file, line $\pm 5$, and rule category. | **Stop / Revise Engine:** Engine blind to core architectural drift. |
-| **3. Real-world Prevalence** | **$\ge 3$ verified TPs per repo** | Observed in at least 2 of 3 held-out repositories. Validated by manual 200-LOC spot audit. | **Stop / Pivot Project:** Architectural drift is too rare in real code; no market need. |
-| **4. Competitive Moat** | **$\ge 3$ Unique TPs** | Verified TPs caught by Semvibe that are **completely missed** by Drift and by the 3-Run Agent Baseline. Full matrix reported. | **Stop / Pivot:** No technical differentiation over existing tools or raw agents. |
+| **1. Precision** | **Point Estimate $\ge 85\%$** | Wilson 95% CI lower bound $\ge 72\%$ on pooled Run 2 findings ($n \ge 50$, up to 30 sampled per repo). If $n < 50$, expand to Expansion Repositories. | **Stop / Revise Engine:** Excessive noise destroys developer adoption. |
+| **2. Seeded Recall** | **$\ge 85\%$ ($17/20$)** | Evaluated on full Hybrid mode (Run 2). Detected single-injected mutations matching exact file, line $\pm 5$, and rule category. | **Stop / Revise Engine:** Engine blind to core architectural drift. |
+| **3. Real-world Prevalence** | **$\ge 3$ verified TPs per repo** | Observed in at least 2 of 3 held-out repositories. Disambiguated by 30-function manual spot audit: if tool finds $< 3$ but audit finds $\ge 3$, action is **Revise** (Recall gap); if audit also finds $0$, action is **Pivot** (market gap). | **Stop / Revise or Pivot:** Decoupled by spot audit. |
+| **4. Competitive Moat** | **$\ge 3$ Unique TPs** | Verified TPs caught by Semvibe that are **completely missed** by Drift and by the 3-Run Agent Baseline. Pooled blind labeling across Runs 2, 3, and 4. | **Stop / Pivot:** No technical differentiation over existing tools or raw agents. |
 | **5. Qualitative Utility** | **$\ge 3$ of 5 dev interviews confirm value** | Outside developers (non-colleagues) confirm findings on their repos warrant fixing in CI. | **Stop / Pivot:** Findings are technically true but developers don't care. |
 
 ---
@@ -46,9 +47,13 @@ All commit SHAs are verified directly via Git:
    * URL: `https://github.com/leerob/next-saas-starter.git`
    * Verified SHA: `6e33e58b1e553a41fe22e6b941a7229a002de361`
 
-### Reserve Held-Out Test Set (2 Repositories — activated if $n < 50$ findings or after engine revision):
-* **Reserve 1:** `t3-oss/create-t3-app` (SHA: `4709861f7e67a15564c0460c13e7b4b6cfcae40d`)
-* **Reserve 2:** `steven-tey/precedent` (SHA: `3be40205d7cdf56082cd284f07f12251b9208f79`)
+### Tier 1: Sample Expansion Repositories (Activated ONLY if primary held-out yields $n < 50$ findings):
+* **Expansion 1:** `t3-oss/create-t3-app` (SHA: `4709861f7e67a15564c0460c13e7b4b6cfcae40d`)
+* **Expansion 2:** `steven-tey/precedent` (SHA: `3be40205d7cdf56082cd284f07f12251b9208f79`)
+
+### Tier 2: Post-Revision Reserve Repositories (Held in strict reserve if engine fails and undergoes code fixes):
+* **Reserve 1:** `payloadcms/payload` (SHA: verified on clone)
+* **Reserve 2:** `directus/directus` (SHA: verified on clone)
 
 *Limitation Statement:* The test corpus evaluates general multi-contributor TypeScript repositories. The percentage of AI co-author commits per repository will be measured and reported as an observational covariate, not an unverified premise.
 
@@ -100,7 +105,7 @@ To eliminate statistical edge-effects, the baseline repo contains **10–12 file
   20. Raw global `fetch()` call in utility without project headers.
 
 ### 3.4 Criteria for Counting a Seeded Mutation as "Detected":
-A seeded mutation is counted as detected ($+1$ to Recall) IF AND ONLY IF:
+Evaluated on **Hybrid Run 2** pipeline. A seeded mutation is counted as detected ($+1$ to Recall) IF AND ONLY IF:
 1. **Target File Match:** The finding's `filePath` corresponds exactly to the mutated file.
 2. **Line Range Match:** The reported line number falls within $\pm 5$ lines of the mutated injection.
 3. **Category Match:** The reported rule type matches the mutation category.
@@ -115,26 +120,26 @@ Four parallel evaluations are executed on the same held-out test set:
 
 1. **Run 1: Pure AST Mode (`semvibe scan --ast-only`)**
 2. **Run 2: Hybrid Semvibe (`semvibe scan`)**
-   * Model: `claude-3-5-sonnet-latest` (or `deepseek-chat` via local OmniRoute `http://localhost:20128/v1`).
-   * Parameters: Temperature = `0.0`, Seed = `42`, 3 runs with majority voting.
+   * Model: `claude-3-5-sonnet-20241022` via local OmniRoute gateway (`http://localhost:20128/v1`).
+   * Parameters: Temperature = `0.0`, response caching enabled, 3 runs with majority voting.
 3. **Run 3: `drift-analyzer[typescript]`**
    * Version: `drift-analyzer >= 1.4.2` running local deterministic rules.
 4. **Run 4: Autonomous Agent Explorer Baseline (3-Run Union)**
-   * AI agent powered by the same model class given terminal tools (`grep`, `cat`, `find`) with prompt: *"Analyze this repository and list all architectural inconsistencies, broken layer boundaries, and library redundancies."*
+   * AI agent powered by `claude-3-5-sonnet-20241022` given terminal tools (`grep`, `cat`, `find`) with prompt: *"Analyze this repository and list all architectural inconsistencies, broken layer boundaries, and library redundancies."*
    * Run 3 times independently; union of findings forms the agent baseline.
 
 ### Rule for "Unique TP" (Gate 4):
 A finding is classified as a **Unique TP** if:
 * It is confirmed as `[TP]` by independent human review.
 * Neither Drift nor the 3-Run Agent Baseline reported a violation on the same file and line ($\pm 10$ lines) within the same category.
-* The full comparative matrix (Semvibe TPs, Drift TPs, Agent TPs, and unique overlaps) is reported in full.
+* All findings from Runs 2, 3, and 4 are exported to a single unified CSV for blind human review.
 
 ---
 
 ## 5. Independent Blind Labeling & Suppression Audit
 
 1. **Sampling & Pooling:**
-   * Run 2 findings across held-out repositories are exported into a randomized CSV without tool names or confidence scores.
+   * Up to 30 findings sampled randomly per repository using PRNG Seed `42`, pooled across all runs into a randomized CSV without tool names or confidence scores.
    * Extrapolation formula for total repository violations:
      $$\text{Estimated Repo TPs} = \left(\frac{\text{TP}_{\text{sample}}}{n_{\text{sample}}}\right) \times N_{\text{total\_findings}}$$
 2. **Double-Blind Review & Inter-Rater Agreement:**
@@ -142,4 +147,4 @@ A finding is classified as a **Unique TP** if:
    * A random 20-sample subset is independently labeled by Evaluator B to compute Cohen's kappa. If $\kappa < 0.70$, rubrics are recalibrated and findings re-labeled.
 3. **Negative Suppression Audit (Actionable Recall Gate):**
    * A random sample of 20 findings rejected by the LLM (which AST flagged) is inspected.
-   * **Failure Condition:** If $\ge 3$ of 20 rejected findings are verified `[TP]` (true violations mistakenly suppressed), the run is **invalidated** due to excessive false negative suppression, triggering a prompt revision before re-testing on Reserve Repositories.
+   * **Failure Condition:** If $\ge 3$ of 20 rejected findings are verified `[TP]` (true violations mistakenly suppressed), the run is **invalidated** due to excessive false negative suppression, triggering a prompt revision before re-testing on Tier 2 Reserve Repositories.
