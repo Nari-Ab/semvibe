@@ -1,24 +1,37 @@
-# Gate 5 Execution Plan: Real-World Developer Validation
-*Revised 2026-10-04 following empirical benchmark review*
+# Gate 5 Execution Plan: Real-World Developer Validation (Refined)
+*Date: 2026-10-04 | Status: Ready for Field Sessions*
 
-### 1. Goal & Guardrails
-- **Objective:** Test whether autonomous architectural invariant scanning provides real value to active developers using AI coding agents.
-- **Rule 1 (Honesty):** Run Semvibe on the volunteer's *own* active TypeScript/Next.js repository. Show them the full raw CLI output (including potential FP-Intentional findings), not cherry-picked findings from external repos.
-- **Rule 2 (Ethical Outreach):** Do NOT open unsolicited GitHub Issues or Pull Requests on strangers' public repositories. Recruit 3–5 active volunteers via Discord (Cursor, Claude Code, Anthropic Devs), Reddit (`r/nextjs`, `r/typescript`), or Twitter/X.
-- **Rule 3 (1-Week Timebox):** Allocate exactly 7 days. If $\ge 3/5$ developers say "would not fix" or "too noisy for CI", stop investing in Classes C/D and pivot immediately.
+### 1. Goal & Boundaries
+- **Objective:** Determine whether autonomous architectural invariant discovery solves an acute, actionable problem for active TypeScript developers using AI coding agents.
+- **Rule 1 (Zero Deception & Their Own Code):** Run Semvibe on the volunteer's *own active repository*. Show the complete raw CLI output (including false alarms and context noise).
+- **Rule 2 (Local Privacy Guarantee):** Zero tokens sent to external servers. The engine is 100% local and offline. The developer can run it themselves via terminal or screen share.
+- **Rule 3 (Community Ethics):** No cold unsolicited PRs/Issues on strangers' repositories. Post invites in developer discords (Cursor, Claude Code, Anthropic Devs) and Reddit (`r/nextjs`, `r/typescript`) following self-promotion rules, offering a free architectural consistency audit report in exchange for 20 minutes of feedback.
+- **Rule 4 (Strict 7-Day Timebox):** Allocate exactly 1 calendar week.
 
-### 2. Interview Script & Questioning
-For each volunteer:
-1. Run `npx semvibe scan .` on their repo.
-2. Present findings and ask 3 specific questions:
-   - *Q1:* "Does finding [X] point out a convention you actually intended to follow across this project, or is it an intentional design choice / noise?"
-   - *Q2:* "If this check ran in your GitHub Actions CI or pre-commit hook, would you fix this code or would it cause workflow friction?"
-   - *Q3:* "Have you noticed AI coding agents (Cursor, Claude, Copilot) introducing this kind of pattern divergence in your PRs?"
+---
 
-### 3. Decision Matrix
-- **$\ge 3/5$ say "Valuable / Would fix":**
-  - Implement Tier/Context classification (Client Components / React Hooks vs Server Actions / API Routes).
-  - Implement AST graph detectors for Class C (layer inversion) and Class D (unencapsulated globals).
-  - Validate on fresh reserve repositories (`payload`, `directus`) and a new independent set of 20 mutations.
-- **$\le 2/5$ say "Valuable" (or find noise intolerable):**
-  - **PIVOT:** Acknowledge that statistical invariant discovery on syntactic patterns does not solve a sufficiently acute pain point for developers. Pivot to alternative hypotheses (e.g. Rep or Hallucinate).
+### 2. Item-by-Item Labeling Rubric (Recorded Verbatim)
+Do NOT ask vague overall impressions. For **every individual finding** flagged by the tool on their codebase, ask the developer to assign one of three verdicts:
+- **`[Fix]`**: "I consider this an unwanted deviation/bug and I would submit a PR to fix it."
+- **`[Ignore]`**: "Technically divergent or intentional domain choice, but I would NOT spend time fixing it."
+- **`[Bug/Noise]`**: "False alarm, incorrect analysis, or irrelevant style nit."
+
+Record the developer's exact verbatim words without leading or defending the tool.
+
+---
+
+### 3. Pre-Registered Decision Matrix (Handling the "In-Between" Case)
+
+| Outcome Scenario | Condition | Decision | Next Step |
+| :--- | :--- | :--- | :--- |
+| **Clear Value** | $\ge 3 / 5$ developers confirm majority of findings are `[Fix]` AND explicitly state they would keep it in CI. | **PROCEED (Go)** | Implement context classifier (Client vs Server vs Stream) and AST rules for Classes C & D. Validate on reserves (`payload`, `directus`). |
+| **Clear Noise** | $\ge 3 / 5$ developers state findings are predominantly `[Noise]` or `[Ignore]`. | **STOP (No-Go / Pivot)** | Close Semvibe. Transition immediately to Project 2 (Реп). |
+| **Ambiguous / In-Between** | 2 positive, 2 negative, 1 mixed (e.g. 2/2/1) OR fewer than 3 sessions completed in 7 days due to low developer interest. | **DEFAULT NO-GO / PIVOT** | Lack of strong organic demand or decisive majority is treated as a failed market signal. Avoid lingering in zombie state; pivot to Реп. |
+
+---
+
+### 4. Transition Pathway to Project 2: «Реп» (Rep)
+If Gate 5 triggers the NO-GO / Pivot rule at the end of the 7-day timebox:
+- Complete post-mortem documented in 1 page.
+- Immediate pivot to **«Реп» (Rep)** — B2B SaaS for venue/establishment reputation and feedback management.
+- Validation method: fast, cash-grounded customer discovery with 10 real venue managers/owners with pre-registered interview script and upfront commitment checks.

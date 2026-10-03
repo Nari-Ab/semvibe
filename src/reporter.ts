@@ -68,7 +68,12 @@ export function printScanReport(result: ScanResult, dir: string) {
   console.log();
 
   if (result.violations.length === 0) {
-    console.log(chalk.bold.green("  ✅ No architectural inconsistencies detected! Codebase is aligned."));
+    if (result.invariantsUsed.length === 0) {
+      console.log(chalk.bold.yellow("  ⚠ Notice: Insufficient sample size to establish statistical invariants (< 5 files per architectural role)."));
+      console.log(chalk.dim("    Semvibe requires recurring patterns across multiple files to infer codebase conventions."));
+    } else {
+      console.log(chalk.bold.green("  ✅ No architectural inconsistencies detected! Codebase is aligned."));
+    }
     console.log();
     return;
   }

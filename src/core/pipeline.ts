@@ -86,7 +86,10 @@ export async function runScan(
   dir: string,
   options: { astOnly?: boolean; client?: LLMClient } = {}
 ): Promise<ScanResult> {
-  // 1. Get or learn invariants
+  // 1. Scan codebase
+  const scannedFiles = await scanCodebase(dir);
+
+  // 2. Get or learn invariants
   let invariants = loadSavedInvariants(dir);
   if (!invariants || invariants.length === 0) {
     const learnRes = await runLearn(dir, { autoConfirm: false });
@@ -97,12 +100,10 @@ export async function runScan(
     return {
       violations: [],
       invariantsUsed: [],
-      totalFilesScanned: 0,
+      totalFilesScanned: scannedFiles.length,
     };
   }
 
-  // 2. Scan codebase and extract signatures
-  const scannedFiles = await scanCodebase(dir);
   const signatures: FileSignature[] = [];
   const fileContents: Record<string, string> = {};
 
