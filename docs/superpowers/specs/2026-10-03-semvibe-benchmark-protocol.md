@@ -2,7 +2,9 @@
 **Pre-Registered Empirical Testing Standard**
 *Date: 2026-10-03*
 *Engine Frozen Commit:* `ce461f7`
-*Prompt Hash (SHA-256):* `4a9f2e8b...`
+*Model ID (Fixed Baseline & Hybrid):* `claude-sonnet-5-5`
+*Verifier Prompt Hash (SHA-256):* `9e8c28f6776055452b279b906fbc9d8ce323296f558c317415793e9f047e81c4`
+*Agent Baseline Prompt Hash (SHA-256):* `43d662043940eaa53d12ccf94ed3a5e0e413278789e559eaa706dddeef2724bb`
 *Sampling Seed:* `42`
 
 ---
@@ -13,9 +15,9 @@
 
 | Gate | Target Metric | Statistical Formulation & Pass Condition | Failure Action |
 | :--- | :--- | :--- | :--- |
-| **1. Precision** | **Point Estimate $\ge 85\%$** | Wilson 95% CI lower bound $\ge 72\%$ on pooled Run 2 findings ($n \ge 50$, up to 30 sampled per repo). If $n < 50$, expand to Expansion Repositories. | **Stop / Revise Engine:** Excessive noise destroys developer adoption. |
+| **1. Precision** | **Point Estimate $\ge 85\%$** | Wilson 95% CI lower bound $\ge 72\%$ on pooled Run 2 findings ($n \ge 50$, up to 30 sampled per repo per tool). If $n < 50$, expand to Expansion Repositories. | **Stop / Revise Engine:** Excessive noise destroys developer adoption. |
 | **2. Seeded Recall** | **$\ge 85\%$ ($17/20$)** | Evaluated on full Hybrid mode (Run 2). Detected single-injected mutations matching exact file, line $\pm 5$, and rule category. | **Stop / Revise Engine:** Engine blind to core architectural drift. |
-| **3. Real-world Prevalence** | **$\ge 3$ verified TPs per repo** | Observed in at least 2 of 3 held-out repositories. Disambiguated by 30-function manual spot audit: if tool finds $< 3$ but audit finds $\ge 3$, action is **Revise** (Recall gap); if audit also finds $0$, action is **Pivot** (market gap). | **Stop / Revise or Pivot:** Decoupled by spot audit. |
+| **3. Real-world Prevalence** | **$\ge 3$ verified TPs per repo** | Observed in at least 2 of 3 held-out repositories. Disambiguated by exhaustive 3-convention audit: if tool finds $< 3$ but audit confirms $\ge 3$ violations, action is **Revise** (Recall gap); if exhaustive audit confirms $< 3$ violations across the entire slice, action is **Pivot** (clean codebase / market gap). | **Stop / Revise or Pivot:** Decoupled by exhaustive audit. |
 | **4. Competitive Moat** | **$\ge 3$ Unique TPs** | Verified TPs caught by Semvibe that are **completely missed** by Drift and by the 3-Run Agent Baseline. Pooled blind labeling across Runs 2, 3, and 4. | **Stop / Pivot:** No technical differentiation over existing tools or raw agents. |
 | **5. Qualitative Utility** | **$\ge 3$ of 5 dev interviews confirm value** | Outside developers (non-colleagues) confirm findings on their repos warrant fixing in CI. | **Stop / Pivot:** Findings are technically true but developers don't care. |
 
@@ -25,7 +27,7 @@
 
 All commit SHAs are verified directly via Git:
 
-### Dev Calibration Set (2 Repositories — used solely for prompt calibration, never for scoring):
+### Dev Calibration Set (2 Repositories — used solely for prompt calibration on `claude-sonnet-5-5`, never for scoring):
 1. **`AGGIB/QIP` (Frontend Slice)**
    * Commit SHA: `6a81c547c1ec3ba834231881d403d25ee12c15ca`
    * Characteristics: Local Next.js 15 App Router, React 19, TypeScript with explicit `AGENTS.md`.
@@ -48,12 +50,12 @@ All commit SHAs are verified directly via Git:
    * Verified SHA: `6e33e58b1e553a41fe22e6b941a7229a002de361`
 
 ### Tier 1: Sample Expansion Repositories (Activated ONLY if primary held-out yields $n < 50$ findings):
-* **Expansion 1:** `t3-oss/create-t3-app` (SHA: `4709861f7e67a15564c0460c13e7b4b6cfcae40d`)
-* **Expansion 2:** `steven-tey/precedent` (SHA: `3be40205d7cdf56082cd284f07f12251b9208f79`)
+* **Expansion 1:** `t3-oss/create-t3-app` (Verified SHA: `4709861f7e67a15564c0460c13e7b4b6cfcae40d`)
+* **Expansion 2:** `steven-tey/precedent` (Verified SHA: `3be40205d7cdf56082cd284f07f12251b9208f79`)
 
 ### Tier 2: Post-Revision Reserve Repositories (Held in strict reserve if engine fails and undergoes code fixes):
-* **Reserve 1:** `payloadcms/payload` (SHA: verified on clone)
-* **Reserve 2:** `directus/directus` (SHA: verified on clone)
+* **Reserve 1:** `payloadcms/payload` (Verified SHA: `15d051b5613d79293f607eab4b1a7e535b75b138`)
+* **Reserve 2:** `directus/directus` (Verified SHA: `f5be756db0d01c435ab683663c1c896c4d30db67`)
 
 *Limitation Statement:* The test corpus evaluates general multi-contributor TypeScript repositories. The percentage of AI co-author commits per repository will be measured and reported as an observational covariate, not an unverified premise.
 
@@ -120,26 +122,31 @@ Four parallel evaluations are executed on the same held-out test set:
 
 1. **Run 1: Pure AST Mode (`semvibe scan --ast-only`)**
 2. **Run 2: Hybrid Semvibe (`semvibe scan`)**
-   * Model: `claude-3-5-sonnet-20241022` via local OmniRoute gateway (`http://localhost:20128/v1`).
-   * Parameters: Temperature = `0.0`, response caching enabled, 3 runs with majority voting.
+   * Model: `claude-sonnet-5-5` via local OmniRoute gateway (`http://localhost:20128/v1`).
+   * Parameters: Temperature = `0.2` for independent sampling.
+   * Execution & Voting Protocol: Three independent API calls are executed per outlier candidate without caching. Raw outputs `[raw_1, raw_2, raw_3]` are logged to `benchmark/raw_runs/run2_*.json`. A candidate is marked as a violation iff $\ge 2$ of 3 runs classify it as `isTruePositive: true`. ONLY AFTER all raw votes are recorded, the resulting consensus is serialized and cached to disk for deterministic offline replay and auditing.
 3. **Run 3: `drift-analyzer[typescript]`**
    * Version: `drift-analyzer >= 1.4.2` running local deterministic rules.
 4. **Run 4: Autonomous Agent Explorer Baseline (3-Run Union)**
-   * AI agent powered by `claude-3-5-sonnet-20241022` given terminal tools (`grep`, `cat`, `find`) with prompt: *"Analyze this repository and list all architectural inconsistencies, broken layer boundaries, and library redundancies."*
-   * Run 3 times independently; union of findings forms the agent baseline.
+   * AI agent powered by `claude-sonnet-5-5` given terminal tools (`grep`, `cat`, `find`) with prompt: *"Analyze this repository and list all architectural inconsistencies, broken layer boundaries, and library redundancies."* (SHA-256: `43d662043940eaa53d12ccf94ed3a5e0e413278789e559eaa706dddeef2724bb`).
+   * Run 3 times independently; raw interaction traces saved; union of findings forms the agent baseline.
+   * Note on Dev Set Calibration: Both the Semvibe verifier prompts and agent system prompts were calibrated strictly on `claude-sonnet-5-5` using the 2 Dev Set repositories, ensuring zero cross-model drift.
 
-### Rule for "Unique TP" (Gate 4):
+### Rule for "Unique TP" & Agent Output Categorization (Gate 4):
 A finding is classified as a **Unique TP** if:
 * It is confirmed as `[TP]` by independent human review.
 * Neither Drift nor the 3-Run Agent Baseline reported a violation on the same file and line ($\pm 10$ lines) within the same category.
+* **Agent Free-Text Categorization Protocol:** The Agent Baseline outputs unstructured natural language. Evaluator A (blind to tool origin) maps each agent finding to one of the 4 standard architectural categories using the pre-registered rubric. To eliminate negative bias against the baseline, an **inclusive match rule** applies: any agent finding within $\pm 10$ lines citing the same code symbol or architectural deviation is matched and credited to the agent.
 * All findings from Runs 2, 3, and 4 are exported to a single unified CSV for blind human review.
 
 ---
 
-## 5. Independent Blind Labeling & Suppression Audit
+## 5. Independent Blind Labeling, Stratified Sampling & Exhaustive Audit
 
-1. **Sampling & Pooling:**
-   * Up to 30 findings sampled randomly per repository using PRNG Seed `42`, pooled across all runs into a randomized CSV without tool names or confidence scores.
+1. **Stratified Sampling & Pooling (Preventing Sample Starvation):**
+   * Up to 30 findings sampled randomly per repository **per tool** using PRNG Seed `42`.
+   * Specifically: Run 2 yields up to 30 findings per repo (up to 90 total across 3 repos), guaranteeing $n \ge 50$ for Gate 1 Wilson Score confidence bounds. Drift and Agent Baseline similarly contribute up to 30 sampled findings per repo.
+   * All sampled findings are pooled into a single anonymized CSV without tool names or confidence scores.
    * Extrapolation formula for total repository violations:
      $$\text{Estimated Repo TPs} = \left(\frac{\text{TP}_{\text{sample}}}{n_{\text{sample}}}\right) \times N_{\text{total\_findings}}$$
 2. **Double-Blind Review & Inter-Rater Agreement:**
@@ -148,3 +155,12 @@ A finding is classified as a **Unique TP** if:
 3. **Negative Suppression Audit (Actionable Recall Gate):**
    * A random sample of 20 findings rejected by the LLM (which AST flagged) is inspected.
    * **Failure Condition:** If $\ge 3$ of 20 rejected findings are verified `[TP]` (true violations mistakenly suppressed), the run is **invalidated** due to excessive false negative suppression, triggering a prompt revision before re-testing on Tier 2 Reserve Repositories.
+4. **Exhaustive 3-Convention Audit (Decoupling Recall Gap from Market Gap for Gate 3):**
+   * A random 30-function spot audit is statistically underpowered (if true drift prevalence is 2–3%, $P(\text{find } 0) \approx 55\%$, creating a high false Pivot risk).
+   * Instead, the auditor executes an **exhaustive grep audit** across 2–3 explicit architectural conventions across the target slice:
+     - **Convention 1 (Service Error Style):** Dominant pattern (`Result<T, E>` vs `throw`). Audit command: `rg --glob "src/services/**" "throw new "`.
+     - **Convention 2 (HTTP Client / Network):** Dominant client wrapper vs raw network calls. Audit command: `rg "axios|got|superagent|from 'fetch'|from \"fetch\""`.
+     - **Convention 3 (Schema & DTO Validation):** Dominant validator (e.g. `zod`) vs rogue validators (`yup`, `joi`). Audit command: `rg "from 'yup'|from 'joi'"`.
+   * The human auditor counts the **total actual violations** in the slice:
+     - If total actual violations $\ge 3$ and Semvibe detected $< 3 \implies$ **Stop / Revise Engine** (proven recall failure).
+     - If total actual violations $< 3$ across the entire slice $\implies$ **Stop / Pivot** (proven architectural cleanliness / market absence).
