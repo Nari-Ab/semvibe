@@ -1,126 +1,107 @@
-# Semvibe: Benchmark & Go/No-Go Evaluation Protocol (Final v3)
+# Semvibe: Benchmark & Go/No-Go Evaluation Protocol (Final Production Standard)
 **Rigorous Pre-Registered Empirical Specification**
 *Date: 2026-10-03*
 *Engine Frozen Commit:* `ce461f7`
 
 ---
 
-## 1. Pinned Repositories (Verified URLs & Real Git SHAs)
+## 1. Pre-Registered Decision Rules (All Gates Mandatory)
 
-All commit SHAs have been strictly verified via `git ls-remote` against GitHub:
+> **CRITICAL RULE:** For a **"GO"** decision to Phase 2 commercial development, **ALL 5 GATES MUST PASS SIMULTANEOUSLY**. Failure of any single gate triggers an immediate **STOP / PIVOT** review.
 
-### Dev Calibration Set (2 Repositories — for calibrating rules and prompt templates):
+| Gate | Target Metric | Statistical Formulation & Pass Condition | Failure Action |
+| :--- | :--- | :--- | :--- |
+| **1. Precision** | **Point Estimate $\ge 85\%$** | Wilson 95% CI lower bound $\ge 72\%$ on pooled sample ($n \ge 50$). If $n < 50$, mark **Inconclusive** and expand sample. | **Stop / Revise Engine:** Excessive noise destroys developer adoption. |
+| **2. Seeded Recall** | **$\ge 85\%$ ($17/20$)** | Detected seeded mutations matching exact file, line $\pm 5$, and rule category. | **Stop / Revise Engine:** Blind to common architectural drift. |
+| **3. Prevalence** | **$\ge 3$ verified TPs per repo** | Observed in at least 2 of 3 held-out repositories. | **Stop / Pivot Project:** Architectural drift is too rare in real code; no market need. |
+| **4. Competitive Moat** | **$\ge 3$ Unique TPs** | Verified TPs caught by Semvibe that are **completely missed** by Drift and by the 3-run Agent Baseline. | **Stop / Pivot:** No technical differentiation over existing tools or raw agents. |
+| **5. Qualitative Utility** | **$\ge 3$ of 5 dev interviews confirm value** | Outside developers (non-colleagues) confirm findings on their repos warrant fixing in CI. | **Stop / Pivot:** Findings are technically true but developers don't care. |
+
+---
+
+## 2. Pinned Repositories (Verified URLs & Real Git SHAs)
+
+All commit SHAs are verified directly via Git:
+
+### Dev Calibration Set (2 Repositories — used solely for prompt calibration, never for scoring):
 1. **`AGGIB/QIP` (Frontend Slice)**
-   * URL: `git@github.com:AGGIB/QIP.git`
    * Commit SHA: `6a81c547c1ec3ba834231881d403d25ee12c15ca`
-   * Stack: Next.js 15 App Router, React 19, TypeScript.
+   * Characteristics: Local Next.js 15 App Router, React 19, TypeScript with explicit `AGENTS.md`.
 2. **`shadcn-ui/taxonomy`**
-   * URL: `https://github.com/shadcn-ui/taxonomy.git`
    * Commit SHA: `298a8857c7128a0d121e7f699dfd729f23b3966d`
-   * Stack: Next.js 14 App Router, Prisma, Zod, Tailwind.
+   * Characteristics: Next.js 14 App Router, Prisma, Zod, Tailwind.
 
-### Primary Held-Out Test Set (3 Repositories — FROZEN, single execution):
-3. **Repo A (AI-Vibe Coded SaaS Web App):**
+### Primary Held-Out Test Set (3 Repositories — FROZEN, evaluated once with zero code tweaks):
+3. **Repo A (Fast-Paced Next.js Web Application):**
    * Repo: `dubinc/dub` (Slice: `apps/web`)
    * URL: `https://github.com/dubinc/dub.git`
    * Verified SHA: `6b2d17fd827d058ff9f5709630677260740055da`
-   * Characteristics: Fast-paced Next.js application with active multi-author AI development and community PRs.
 4. **Repo B (Multi-tier Backend Service Layer):**
    * Repo: `calcom/cal.com` (Slice: `packages/trpc` + `packages/features`)
    * URL: `https://github.com/calcom/cal.com.git`
    * Verified SHA: `54343aa685ae8f33159d2f485ec4a57bad5c574a`
-   * Characteristics: Production enterprise TypeScript monorepo with clean layering, strict RPC schemas, and complex error handling.
-5. **Repo C (Full-Stack AI Starter / Boilerplate):**
+5. **Repo C (Modern SaaS Starter):**
    * Repo: `leerob/next-saas-starter`
    * URL: `https://github.com/leerob/next-saas-starter.git`
    * Verified SHA: `6e33e58b1e553a41fe22e6b941a7229a002de361`
-   * Characteristics: Modern Next.js 15, Server Actions, Drizzle ORM, Stripe.
 
-### Reserve Held-Out Test Set (2 Repositories — Held in reserve if post-fix re-evaluation is needed):
+### Reserve Held-Out Test Set (2 Repositories — reserved if engine requires fixes):
 * **Reserve 1:** `t3-oss/create-t3-app` (SHA: `4709861f7e67a15564c0460c13e7b4b6cfcae40d`)
 * **Reserve 2:** `steven-tey/precedent` (SHA: `3be40205d7cdf56082cd284f07f12251b9208f79`)
 
 ---
 
-## 2. Baseline Fixture & Mutation Protocol (Recall Evaluation)
+## 3. Robust Baseline Repository & Mutation Detection Criteria
 
-### 2.1 The Baseline Repository (`tests/benchmark/baseline-repo/`)
-To guarantee that mutations test true detection rather than the absence of invariants, a verified baseline repository is constructed containing:
-* 5 service files returning `Result<T, AppError>` (80%+ dominance).
-* 4 API route files using `native-fetch` (100% dominance).
-* 4 schema files using `zod` (100% dominance).
-* 3 state stores using `zustand` (100% dominance).
-* Strict layer separation (UI components do not import database layer; services do not import UI).
+### 3.1 Robust Baseline Repository (`tests/benchmark/baseline-repo/`)
+To eliminate statistical edge-effects, the baseline repo contains **10–12 files per convention**:
+* 10 service files returning `Result<T, AppError>` (100% dominance).
+* 10 controller files in `src/controllers/` routing to services (100% dominance).
+* 8 API route files using `native-fetch` (100% dominance).
+* 8 schema files using `zod` (100% dominance).
+* 6 state stores using `zustand` (100% dominance).
+* Strict layer separation: Controllers import services; services do NOT import controllers or UI; UI does NOT import DB.
 
-**Negative Control Gate:** Running `semvibe learn` on this baseline MUST discover all 4 invariants with $\ge 80\%$ confidence, and running `semvibe scan` on the un-mutated baseline MUST yield **exactly 0 violations**.
+**Negative Control Check:** `semvibe scan` on the un-mutated baseline MUST yield **exactly 0 violations**.
 
-### 2.2 Independent Mutation Generation & Injection
-* Mutations are authored by an independent script/model without access to Semvibe's source code or `PACKAGE_ROLES` dictionary.
-* **Isolated Single-Injection Testing:** Each mutation is tested against an independent copy of the baseline repository (one mutation per copy). This prevents 20 simultaneous mutations from artificially breaking the baseline's 75% dominance threshold.
-
-### 2.3 The 20 Mutation Classes (Strictly Phase 1 Aligned):
-* **Error Handling Inconsistencies (6):**
-  1. Service method throwing raw `new Error("msg")`.
-  2. Service method returning `{ success: false, error: "msg" }`.
-  3. Service method returning `{ error: "failed" }`.
-  4. Service method throwing raw string (`throw "unauthorized"`).
-  5. Controller method throwing untyped custom exception.
-  6. Service method returning `undefined` silently on error.
-* **Library Role Collisions (7):**
-  7. Rogue `axios` imported in service.
-  8. Rogue `got` imported in service.
-  9. Rogue `superagent` imported in service.
-  10. Rogue `yup` schema in validation module.
-  11. Rogue `joi` validator in validation module.
-  12. Rogue `jotai` atom in store module.
-  13. Rogue `mobx` observable in store module.
-* **Layer Inversions (4):**
-  14. UI Component importing `@prisma/client` directly.
-  15. UI Component importing server database driver.
-  16. Service layer importing presentation component (`components/Button`).
-  17. Controller directly executing low-level raw SQL driver.
-* **Unencapsulated Global Calls (3):**
-  18. Raw global `fetch()` call inside UI component bypassing client wrapper.
-  19. Raw global `fetch()` call in service without error handling.
-  20. Raw global `fetch()` call in utility without project headers.
-
-$$\text{Recall} = \frac{\text{Detected Injections}}{20} \quad (\text{Target} \ge 85\%)$$
-
----
-
-## 3. Pre-Registered Go/No-Go Decision Rules
-
-| Gate | Target Metric | Statistical Formulation | Failure Action |
-| :--- | :--- | :--- | :--- |
-| **1. Precision** | **Point Estimate $\ge 85\%$** | Wilson 95% CI lower bound $\ge 72\%$ on pooled findings ($n \ge 50$) | **Stop/Revise Engine:** Tool generates too much noise for developers. |
-| **2. Recall** | **$\ge 85\%$ ($17/20$)** | Detected single-injected mutations | **Stop/Revise Engine:** Engine misses basic architectural drift. |
-| **3. Prevalence** | **$\ge 1.0$ verified TP per 1,000 scanned LOC** | Observed in at least 2 of 3 held-out test repositories | **Stop/Pivot Project:** Architectural drift is too rare in practice; no real market problem. |
-| **4. Competitive Moat** | **$\ge 3$ Unique TPs** | Findings caught by Semvibe that are MISSED by Drift and by an Autonomous Agent Baseline | **Stop/Pivot:** If existing tools or a raw agent find the same issues, Semvibe has no technical moat. |
-| **5. Qualitative Utility** | **$\ge 3$ of 5 dev interviews confirm value** | Devs agree findings in their own code are worth fixing | **Stop/Pivot:** Findings are technically true but devs don't care to fix them. |
+### 3.2 Criteria for Counting a Seeded Mutation as "Detected":
+A seeded mutation is counted as detected ($+1$ to Recall) IF AND ONLY IF:
+1. **Target File Match:** The finding's `filePath` corresponds exactly to the mutated file.
+2. **Line Range Match:** The reported line number falls within $\pm 5$ lines of the mutated injection.
+3. **Category Match:** The reported rule type matches the mutation category (e.g., error strategy, library collision, layer boundary).
+*Any spurious or unrelated finding on another file is counted as a False Positive, NOT a mutation detection.*
 
 ---
 
 ## 4. Multi-Run Comparative Moat Matrix
 
-Four parallel evaluations are executed on the same held-out test set:
+Four runs are executed on the same held-out test set:
 
-1. **Run 1: Pure AST Mode (`semvibe scan --ast-only`):**
-   * Fast, zero-token baseline.
-2. **Run 2: Hybrid Semvibe (`semvibe scan`):**
-   * Config: Claude 3.7 Sonnet / DeepSeek V3 via OmniRoute, Temperature = `0.0`, 3 repetition majority voting.
-3. **Run 3: `drift-analyzer[typescript]`:**
-   * Python/CLI package running local deterministic rules.
-4. **Run 4: Autonomous Agent Explorer Baseline:**
-   * An AI agent with terminal file access (`grep`, `cat`) given prompt: *"Examine this repository and list all architectural inconsistencies, broken layer boundaries, and library redundancies."*
-   * Measures latency, total tokens, and false-positive rate compared to Semvibe's deterministic invariant extraction.
+1. **Run 1: Pure AST Mode (`semvibe scan --ast-only`)**
+2. **Run 2: Hybrid Semvibe (`semvibe scan`)**
+   * Engine: Claude 3.7 Sonnet via local OmniRoute gateway (`http://localhost:20128/v1`).
+   * Parameters: Temperature = `0.0`, 3 runs with majority voting.
+3. **Run 3: `drift-analyzer[typescript]`**
+   * Python CLI running local deterministic rules.
+4. **Run 4: Autonomous Agent Explorer Baseline (3-Run Union)**
+   * An AI agent with terminal access (`grep`, `cat`, `find`) given prompt: *"Analyze this repository and list all architectural inconsistencies, broken layer boundaries, and library redundancies."*
+   * Run 3 times independently; union of findings forms the agent baseline.
+
+### Rule for "Unique TP" (Gate 4):
+A finding is classified as a **Unique TP** if:
+* It is confirmed as `[TP]` by independent human review.
+* Neither Drift nor the 3-Run Agent Baseline reported a violation on the same file and line ($\pm 10$ lines) within the same category.
 
 ---
 
-## 5. Independent Blind Labeling Protocol
+## 5. Independent Blind Labeling & Suppression Audit
 
-1. **Sample Selection & Stratification:**
-   * LOC is counted strictly across scanned TypeScript/JavaScript source files (excluding tests, mocks, and `.d.ts`).
-   * A stratified random sample of candidate findings (up to 30 per repository, pooled to $n \ge 50$) is exported to a randomized CSV with origin and tool identity masked.
-2. **Double-Blind Review:**
-   * Evaluator A (independent human developer) classifies each finding as `[TP]`, `[FP-Intentional]`, or `[FP-Noise]`.
-   * A random 20-sample subset is independently labeled by Evaluator B to compute inter-rater agreement (Cohen's $\kappa \ge 0.70$).
+1. **Sampling & Pooling:**
+   * Up to 30 findings sampled randomly per repository, pooled into a randomized CSV without tool names or confidence scores.
+   * Extrapolation formula for total repository violations:
+     $$\text{Estimated Repo TPs} = \left(\frac{\text{TP}_{\text{sample}}}{n_{\text{sample}}}\right) \times N_{\text{total\_findings}}$$
+2. **Double-Blind Labeling:**
+   * Evaluator A (independent developer not authoring Semvibe) labels all findings into `[TP]`, `[FP-Intentional]`, or `[FP-Noise]`.
+   * Evaluator B independently labels a random 20-sample subset to measure Cohen's kappa. If $\kappa < 0.70$, rubrics are recalibrated and findings re-labeled.
+3. **Negative Suppression Audit (False Negatives of the LLM):**
+   * A random sample of 20 findings rejected by the LLM (which AST flagged) is inspected. If $\ge 3$ of them are genuine violations suppressed by the LLM, the LLM prompt is flagged as over-suppressive.
