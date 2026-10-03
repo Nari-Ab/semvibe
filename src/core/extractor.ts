@@ -35,12 +35,58 @@ export const PACKAGE_ROLES: Record<string, PackageRole> = {
 };
 
 export function inferLayer(filePath: string): LayerType {
-  const lower = filePath.toLowerCase();
-  if (lower.includes(".service.") || lower.includes("/services/")) return "service";
-  if (lower.includes(".controller.") || lower.includes("/controllers/") || lower.includes("/routes/") || lower.includes("/api/")) return "controller";
-  if (lower.includes(".component.") || lower.includes("/components/") || lower.includes("/ui/") || lower.includes("/views/")) return "component";
-  if (lower.includes("/db/") || lower.includes("/database/") || lower.includes("/models/") || lower.includes("/repositories/")) return "db";
-  if (lower.includes("/utils/") || lower.includes("/helpers/") || lower.includes("/lib/")) return "util";
+  const normalized = filePath.replace(/\\/g, "/").toLowerCase();
+  
+  if (
+    normalized.includes(".service.") ||
+    normalized.includes("/services/") ||
+    normalized.startsWith("services/")
+  ) return "service";
+
+  if (
+    normalized.includes(".controller.") ||
+    normalized.includes("/controllers/") ||
+    normalized.startsWith("controllers/") ||
+    normalized.includes("/routes/") ||
+    normalized.startsWith("routes/") ||
+    normalized.includes("/api/") ||
+    normalized.startsWith("api/") ||
+    normalized.includes("route.ts") ||
+    normalized.includes("route.js")
+  ) return "controller";
+
+  if (
+    normalized.includes(".component.") ||
+    normalized.includes("/components/") ||
+    normalized.startsWith("components/") ||
+    normalized.includes("/ui/") ||
+    normalized.startsWith("ui/") ||
+    normalized.includes("/views/") ||
+    normalized.startsWith("views/") ||
+    normalized.endsWith(".tsx") ||
+    normalized.endsWith(".jsx")
+  ) return "component";
+
+  if (
+    normalized.includes("/db/") ||
+    normalized.startsWith("db/") ||
+    normalized.includes("/database/") ||
+    normalized.startsWith("database/") ||
+    normalized.includes("/models/") ||
+    normalized.startsWith("models/") ||
+    normalized.includes("/repositories/") ||
+    normalized.startsWith("repositories/")
+  ) return "db";
+
+  if (
+    normalized.includes("/utils/") ||
+    normalized.startsWith("utils/") ||
+    normalized.includes("/helpers/") ||
+    normalized.startsWith("helpers/") ||
+    normalized.includes("/lib/") ||
+    normalized.startsWith("lib/")
+  ) return "util";
+
   return "unknown";
 }
 
