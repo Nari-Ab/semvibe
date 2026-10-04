@@ -2,9 +2,12 @@
 
 > **Zero-telemetry CLI to catch architectural drift and convention inconsistencies in TypeScript/Next.js projects.**
 
+[![npm version](https://img.shields.io/npm/v/semvibe?color=cb3837&logo=npm)](https://www.npmjs.com/package/semvibe)
+[![npm downloads](https://img.shields.io/npm/dm/semvibe?color=0b7285&label=downloads)](https://www.npmjs.com/package/semvibe)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Zero Telemetry](https://img.shields.io/badge/telemetry-zero%20(offline)-green.svg)](#privacy--security)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-3178C6.svg?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+
 
 When coding with AI agents (Cursor, Claude Code, Copilot), projects gradually accumulate **architectural drift**:
 - Mixed error handling (`throw new AppError()` in 95% of controllers, but `{ error: ... }` in recently generated files).
