@@ -2,7 +2,7 @@ import os
 from PIL import Image, ImageDraw, ImageFont
 
 # Dimensions
-WIDTH = 880
+WIDTH = 960
 HEIGHT = 560
 BG_COLOR = (13, 17, 23)        # GitHub Dark background
 TERM_BG = (22, 27, 34)         # Terminal window background
@@ -137,12 +137,12 @@ result_lines = [
     "",
     [("    #1 ", C_RED, True), ("lib/api/domains/utils.ts:6", C_WHITE, True), (" in validateDomain()", C_MUTED, False)],
     [("       Observed: ", C_MUTED, False), ("error-object", C_RED, True), (" | Expected: ", C_MUTED, False), ("throw", C_GREEN, True)],
-    [("       Reason:   ", C_MUTED, False), ("95%+ of API routes throw AppError. Returning error-object violates contract.", C_WHITE, False)],
+    [("       Reason:   ", C_MUTED, False), ("95%+ of API routes throw AppError. Return object violates contract.", C_WHITE, False)],
     [("       Fix:      ", C_MUTED, False), ("throw new AppError('Invalid domain', 422)", C_CYAN, False)],
     "",
     [("    #2 ", C_RED, True), ("auth/signup/utils/prefillAvatar.ts:1", C_WHITE, True)],
     [("       Observed: ", C_MUTED, False), ("node-fetch", C_RED, True), (" | Expected: ", C_MUTED, False), ("native-fetch", C_GREEN, True)],
-    [("       Reason:   ", C_MUTED, False), ("Project globally uses native global fetch. Redundant library imported.", C_WHITE, False)],
+    [("       Reason:   ", C_MUTED, False), ("Project uses native fetch globally. Redundant library imported.", C_WHITE, False)],
     [("       Fix:      ", C_MUTED, False), ("Remove node-fetch and use global fetch()", C_CYAN, False)],
 ]
 

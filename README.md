@@ -32,12 +32,12 @@ VIOLATIONS FOUND (2)
 
   ● lib/api/domains/utils.ts:6 in validateDomain()
       Observed: error-object | Expected: throw
-      Reason:   95%+ of API routes throw AppError. Returning error-object violates contract.
+      Reason:   95%+ of API routes throw AppError. Return object violates contract.
       Fix:      throw new AppError('Invalid domain', 422)
 
   ● auth/signup/utils/prefillAvatar.ts:1
       Observed: node-fetch | Expected: native-fetch
-      Reason:   Project globally uses native global fetch. Redundant library imported.
+      Reason:   Project uses native fetch globally. Redundant library imported.
       Fix:      Remove node-fetch and use global fetch()
 ```
 
