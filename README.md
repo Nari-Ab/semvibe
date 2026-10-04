@@ -55,6 +55,16 @@ VIOLATIONS FOUND (2)
 - `npx semvibe learn [dir]` — Discover and inspect dominant statistical invariants.
 - `npx semvibe export-rules` — Export conventions into `AGENTS.md` and `CLAUDE.md` for AI agent guardrails.
 
+## Current Status & Limitations
+
+Semvibe is an experimental early preview (v0.1.0). We believe in transparent engineering data:
+
+- **Noise / Precision:** On large, complex existing repositories, precision is currently **~39%**. Some findings will be intentional architectural deviations rather than genuine drift.
+- **Coverage:** Currently focuses on **redundant library collisions** (e.g., rogue `axios` alongside native `fetch`, conflicting schema validators) and **mixed error-handling contracts** (`throw` vs `Result<T, E>` vs `{ error }`).
+- **Best Use:** Run it as an advisory scan or pre-commit sanity check to spot subtle AI-introduced drift, rather than a hard blocking CI gate.
+
+If you try it on your project, honest feedback on which findings you would actually fix vs ignore is the single most valuable contribution.
+
 ## Privacy & Security
 
 Semvibe is built for security-conscious teams:
