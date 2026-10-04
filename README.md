@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="docs/assets/logo.svg" alt="Semvibe" width="360">
+<img src="docs/assets/logo-v2.svg" alt="Semvibe" width="360">
 
 ### Catch architectural drift in AI-generated TypeScript codebases
 
