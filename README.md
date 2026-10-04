@@ -2,7 +2,8 @@
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/assets/logo-dark.svg">
-  <img src="docs/assets/logo.svg" alt="Semvibe" width="340">
+  <source media="(prefers-color-scheme: light)" srcset="docs/assets/logo-light.svg">
+  <img src="docs/assets/logo-dark.svg" alt="Semvibe" width="360">
 </picture>
 
 ### Catch architectural drift in AI-generated TypeScript codebases
