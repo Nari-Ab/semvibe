@@ -4,7 +4,7 @@
   "description": "Zero-telemetry CLI to catch architectural drift and convention inconsistencies in TypeScript/Next.js projects",
   "main": "dist/cli.js",
   "bin": {
-    "semvibe": "./dist/cli.js"
+    "semvibe": "dist/cli.js"
   },
   "files": [
     "dist",
