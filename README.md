@@ -1,81 +1,68 @@
-# Semvibe
+<div align="center">
 
-> **Zero-telemetry CLI to catch architectural drift and convention inconsistencies in TypeScript/Next.js projects.**
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/logo-dark.svg">
+  <img src="docs/assets/logo.svg" alt="Semvibe" width="340">
+</picture>
 
-[![npm version](https://img.shields.io/npm/v/semvibe?color=cb3837&logo=npm)](https://www.npmjs.com/package/semvibe)
-[![npm downloads](https://img.shields.io/npm/dm/semvibe?color=0b7285&label=downloads)](https://www.npmjs.com/package/semvibe)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Zero Telemetry](https://img.shields.io/badge/telemetry-zero%20(offline)-green.svg)](#privacy--security)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-3178C6.svg?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+### Catch architectural drift in AI-generated TypeScript codebases
 
+[![CI](https://github.com/Nari-Ab/semvibe/actions/workflows/ci.yml/badge.svg)](https://github.com/Nari-Ab/semvibe/actions)
+[![telemetry: zero](https://img.shields.io/badge/telemetry-zero%20(offline)-1f9d55)](#privacy--security)
+[![npm version](https://img.shields.io/npm/v/semvibe?logo=npm&logoColor=white&label=npm&color=cb3837)](https://www.npmjs.com/package/semvibe)
+[![npm downloads](https://img.shields.io/npm/dm/semvibe?label=downloads&color=0b7285)](https://www.npmjs.com/package/semvibe)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-When coding with AI agents (Cursor, Claude Code, Copilot), projects gradually accumulate **architectural drift**:
-- Mixed error handling (`throw new AppError()` in 95% of controllers, but `{ error: ... }` in recently generated files).
-- Redundant or rogue libraries (`axios` added when the project standard is native `fetch`).
-- Inconsistent contracts and conventions across layers.
+</div>
 
-**Semvibe** analyzes your codebase locally using TypeScript AST, infers your project's dominant architectural conventions, and flags files that deviate from them.
+When coding with Cursor, Claude Code, or Codex, projects gradually accumulate **architectural drift**: error contracts get mixed up (`throw` vs `{ error: ... }`), agents pull in redundant libraries (`axios` alongside native `fetch`), and conventions erode over time.
 
----
-
-## Quick Start
-
-Run it on your project in seconds without installing:
+Semvibe analyzes your TypeScript AST locally, infers your project's dominant conventions, and flags files that deviate from them.
 
 ```bash
-npx semvibe scan .
+npx semvibe scan .    # scan project for architectural drift; 100% offline
+npx semvibe learn .   # inspect discovered dominant conventions
 ```
 
-Or install globally:
-
-```bash
-npm install -g semvibe
-semvibe scan .
-```
-
----
-
-## Example Output
+What a finding looks like:
 
 ```text
-╔══════════════════════════════════════════════════════════╗
-║                 semvibe · semantic scan                  ║
-╚══════════════════════════════════════════════════════════╝
+semvibe scan — architectural drift in TypeScript codebases
 
-  Scanned:    /workspace/my-nextjs-app
-  Files:      428
-  Invariants: 6
+❌ 2 architectural deviation(s) found in 428 scanned files
 
-  ❌ Found 3 Architectural Violations:
+VIOLATIONS FOUND (2)
 
-  #1 lib/api/domains/utils.ts:6 in validateDomain()
-    Observed: error-object | Expected: throw
-    Reason:   95%+ of controllers and API routes throw AppError. This function returns an error object.
-    Fix:      Align code with standard: throw new AppError(...)
+  ● lib/api/domains/utils.ts:6 in validateDomain()
+      Observed: error-object | Expected: throw
+      Reason:   95%+ of API routes throw AppError. Returning error-object violates contract.
+      Fix:      throw new AppError('Invalid domain', 422)
 
-  #2 auth/signup/utils/prefillAvatar.ts:1
-    Observed: node-fetch | Expected: native-fetch
-    Reason:   Project standard is native fetch. Redundant dependency detected.
-    Fix:      Align code with standard: native-fetch
+  ● auth/signup/utils/prefillAvatar.ts:1
+      Observed: node-fetch | Expected: native-fetch
+      Reason:   Project globally uses native global fetch. Redundant library imported.
+      Fix:      Remove node-fetch and use global fetch()
 ```
 
----
+<div align="center">
+  <img src="docs/assets/demo.gif" alt="Semvibe CLI demo scanning a Next.js codebase" width="840">
+</div>
+
+- **Infers conventions.** Semvibe learns what's standard from your own code patterns instead of forcing rigid, pre-configured rules.
+- **Zero telemetry.** 100% offline and local. Zero network calls, zero tracking. Your code never leaves your machine. MIT.
+- **Guards what's next.** Exports discovered conventions into `AGENTS.md` and `CLAUDE.md` to keep future AI coding agent sessions aligned with your architecture.
 
 ## Commands
 
-- `semvibe scan [directory]` — Scan for architectural drift and outliers.
-- `semvibe learn [directory]` — Discover and inspect dominant invariants in your codebase.
-- `semvibe export-rules` — Export discovered invariants into `AGENTS.md` and `CLAUDE.md` to guide AI coding agents.
-
----
+- `npx semvibe scan [dir]` — Scan codebase for semantic outliers and contract deviations.
+- `npx semvibe learn [dir]` — Discover and inspect dominant statistical invariants.
+- `npx semvibe export-rules` — Export conventions into `AGENTS.md` and `CLAUDE.md` for AI agent guardrails.
 
 ## Privacy & Security
 
-- **100% Local & Offline:** Semvibe runs entirely on your local machine.
-- **Zero Telemetry:** No tracking, no analytics, no external network calls.
-- **Your Code Stays Yours:** Not a single line of your code or file paths ever leaves your computer.
-
----
+Semvibe is built for security-conscious teams:
+- Runs strictly on your local machine using static TypeScript AST analysis.
+- Zero network requests. No external APIs, no analytics, no third-party telemetry.
 
 ## License
 
